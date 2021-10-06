@@ -1,5 +1,5 @@
-/Notes/*
+Notes/*
 .DS_Store
-/chunity-tutorial/*
-/hw2/AudioVisualizer/*
-!/hw2/AudioVisualizer/Assets/Scripts/*
+chunity-tutorial/*
+hw2/AudioVisualizer/*
+!hw2/AudioVisualizer/Assets/Scripts/*
