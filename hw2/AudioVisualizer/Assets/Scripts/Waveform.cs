@@ -27,7 +27,7 @@ public class Waveform : MonoBehaviour
     public GameObject[] the_cubes = new GameObject[NUM_CUBES];
 
     // controllable scale of the y-axis movement "amplification" of cubes
-    public float MY_SCALE = 400;
+    public float MY_SCALE = 1000;
 
     // Start is called before the first frame update
     void Start()
@@ -43,27 +43,27 @@ public class Waveform : MonoBehaviour
 
         for( int i = 0; i < the_cubes.Length; i++ )
         {
-            if(x < -WAVEFORM_MIDDLE_ANCHOR || x > WAVEFORM_MIDDLE_ANCHOR) {
-                // instantiate a prefab game object
-                GameObject go = Instantiate(the_pfCube);
-                // color material
-                go.GetComponent<Renderer>().material.SetColor("_BaseColor", new Color(.5f, 1, .5f));
-                // default position
-                go.transform.position = new Vector3(x, y, z);
-                //
-                // give a name!
-                go.name = "cube" + i;
-                // set a child of this waveform
-                go.transform.parent = this.transform;
-                // put into array
-                the_cubes[i] = go;
-            }
+            // instantiate a prefab game object
+            GameObject go = Instantiate(the_pfCube);
+            // color material
+            go.GetComponent<Renderer>().material.SetColor("_BaseColor", new Color(.5f, 1, .5f));
+            // default position
+            go.transform.position = new Vector3(x, y, z);
             // increment the x position
             x += xIncrement;
+            // give a name!
+            go.name = "cube" + i;
+            // set a child of this waveform
+            go.transform.parent = this.transform;
+            // put into array
+            the_cubes[i] = go; 
         }
 
         // position this ('this' refers to the waveform)
-        this.transform.position = new Vector3(this.transform.position.x, 0, this.transform.position.z);
+        this.transform.position = new Vector3(this.transform.position.x + 50, 0, this.transform.position.z);
+
+        // scale the waveform
+        this.transform.localScale = new Vector3(0.325f, 1, 1);
     }
 
     // Update is called once per frame
