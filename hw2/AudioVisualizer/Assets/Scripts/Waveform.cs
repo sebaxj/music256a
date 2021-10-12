@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System;
 
 // localPosition is the position of the transform relative 
 // to the parent transform (Waveform (parent) -> cube (child))
@@ -13,10 +14,6 @@ using UnityEngine;
 //-----------------------------------------------------------------------------
 public class Waveform : MonoBehaviour
 {
-    // constant to control where the waveform is anchored in the middle
-    // of the screen
-    private const int WAVEFORM_MIDDLE_ANCHOR = 245;
-
     // constant to for the number of cubes (same as number of samples in time domain)
     // to store in the array
     private const int NUM_CUBES = 1024;
@@ -27,7 +24,7 @@ public class Waveform : MonoBehaviour
     public GameObject[] the_cubes = new GameObject[NUM_CUBES];
 
     // controllable scale of the y-axis movement "amplification" of cubes
-    public float MY_SCALE = 1000;
+    public float MY_SCALE = 200;
 
     // Start is called before the first frame update
     void Start()
@@ -63,7 +60,7 @@ public class Waveform : MonoBehaviour
         this.transform.position = new Vector3(this.transform.position.x + 50, 0, this.transform.position.z);
 
         // scale the waveform
-        this.transform.localScale = new Vector3(0.325f, 1, 1);
+        this.transform.localScale = new Vector3(0.325f, 2, 1);
     }
 
     // Update is called once per frame
@@ -72,6 +69,11 @@ public class Waveform : MonoBehaviour
         // local reference to the time domain waveform
         // contains 1024 floating point numbers with the magnitude of waveform
         float[] wf = ChunityAudioInput.the_waveform; 
+        
+        // multiply the waveform by sine function to create smooth wave
+        for(int i = 0; i < wf.Length; i++) {
+            wf[i] *= (float)(Math.Sin(i * (Math.PI / NUM_CUBES)));
+        }
 
         // position the cubes
         for( int i = 0; i < the_cubes.Length; i++ )
