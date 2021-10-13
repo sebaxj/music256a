@@ -18,7 +18,8 @@ public class ChunityRunCode : MonoBehaviour
         // get the chuck subinstance on the object this script is attached to
         chuck = GetComponent<ChuckSubInstance>();
         // run code
-        runMic();
+        //runMic();
+        runSong();
     }
 
     void runMic()
@@ -36,6 +37,17 @@ public class ChunityRunCode : MonoBehaviour
             @"SndBuf buffy => dac;
               ""special:dope"" => buffy.read;
               while( true ) { 0 => buffy.pos; 400::ms => now; }"
+        );
+    }
+
+    void runSong()
+    {
+        // run code -- this constructs a sound loop
+        chuck.RunCode(
+            @"SndBuf buffy => dac;
+            0.3 => buffy.gain;
+             me.dir() + ""big.wav"" => buffy.read;
+              while( true ) { 0 => buffy.pos; buffy.length() / buffy.rate() => now;; }"
         );
     }
 
