@@ -1,42 +1,23 @@
-//--------------------------------------------------------------------
-// name: chant.ck
-// desc: chant synthesizer; demonstrates multi-shredded concurrency,
-//       variable rates, source-filter model, and interpolation.
 //
-// This is a classic source-filter model for rudimentary singing
-// synthesis: an impulse train (the "source", crudely modeling
-// opening/closing of the glottis in the vocal tract) going through
-// a bank of three formant filters (roughly modeling the filtering
-// by the vocal cavity to induce the perception of different vowels).
 //
-// This example demonstrates an elegant way to implement the above
-// in ChucK, by breaking up the tasks into three concurrent shreds:
-//   1. a main shred selects the next target pitch and formants
-//   2. doImpulse() generates the impulse train; using ChucK's
-//      strongly-timed mechanisms to modulate the impulse train
-//      period to create vibrato
-//   3. doInterpolation() interpolates the period and formants,
-//      to smoothly glide from note to note, vowel to vowel
-//
-// author: Perry R. Cook (2006)
-//         modified by Rebecca Fiebrink and Ge Wang (2007, 2021)
-//         published in ChucK examples 2021
-//--------------------------------------------------------------------
-
-// synthesis patch
+// Patch
 Impulse i => TwoZero t => TwoZero t2 => OnePole p;
+
 // formant filters
 p => TwoPole f1 => Gain g;
 p => TwoPole f2 => g;
 p => TwoPole f3 => g;
+
 // reverbs
 g => JCRev r => dac;
 g => JCRev rL => dac.left;
 g => JCRev rR => dac.right;
+
 // delays
 g => Delay d1 => Gain g1 => r;
 g => Delay d2 => Gain g2 => rL;
 g => Delay d3 => Gain g3 => rR;
+
 // connect gains to delays
 g1 => d1; g2 => d2; g3 => d3;
 
@@ -46,10 +27,13 @@ g1 => d1; g2 => d2; g3 => d3;
 // set filter coefficients
 1.0 => t.b0;  0.0 => t.b1; -1.0 => t.b2;
 1.0 => t2.b0; 0.0 => t2.b1; 1.0 => t2.b2;
+
 // set gains
 0.1 => g1.gain;	0.1 => g2.gain;	0.1 => g3.gain;
+
 // set reverb mix
 0.025 => r.mix;
+
 // set delay max and length
 1.5 :: second => d1.max;
 2.0 :: second => d2.max;
@@ -61,10 +45,11 @@ g1 => d1; g2 => d2; g3 => d3;
 // set two pole filter radii and gain
 0.997 => f1.radius; 0.997 => f2.radius; 0.997 => f3.radius;
 1.0 => f1.gain; 0.8 => f2.gain; 0.6 => f3.gain;
+
 // randomize initial formant frequencies
-Math.random2f( 230.0, 660.0 ) => f1.freq;
-Math.random2f( 800.0, 2300.0 ) => f2.freq;
-Math.random2f( 1700.0, 3000.0 ) => f3.freq;
+Std.mtof(50) => f1.freq;
+Std.mtof(53) => f2.freq;
+Std.mtof(57) => f3.freq;
 
 // variables for interpolating current and target formant frequencies
 400.0 => float f1freq;
