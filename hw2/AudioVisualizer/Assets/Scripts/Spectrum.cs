@@ -65,6 +65,13 @@ public class Spectrum : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if (Input.GetKeyDown(KeyCode.Space)) {
+            if(TYPE == 0) {
+                TYPE = 1;
+            } else if(TYPE == 1) {
+                TYPE = 0;
+            }
+        }
         // local reference to the spectrum
         float[] spectrum = ChunityAudioInput.the_spectrum;
 
@@ -96,22 +103,11 @@ public class Spectrum : MonoBehaviour
                     the_cubes[i, j].transform.localPosition.z);
             }
             yOffset += 3f;
-            // if(TYPE == 0) {
-            //     scaleFactor -= 0.01f;
-            // } else if(TYPE == 1) {
-            //     scaleFactor += 0.01f;
-            // }
+            if(TYPE == 0) {
+                scaleFactor -= 0.01f;
+            } else if(TYPE == 1) {
+                scaleFactor += 0.01f;
+            }
         }
-        // if(numTimes >= 50) {
-        //     if(TYPE == 0) {
-        //         TYPE = 1;
-        //     } else if(TYPE == 1) {
-        //         TYPE = 0;
-        //     }
-        //     numTimes = 0;
-        // } else if(numTimes < 50) {
-        //     numTimes++;
-        // }
-
     } 
 }
