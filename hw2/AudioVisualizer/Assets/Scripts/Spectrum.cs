@@ -20,6 +20,9 @@ public class Spectrum : MonoBehaviour
     // spectrum history matrix
     public float[,] history = new float[32, 512];
 
+    private int TYPE = 0;
+    private int numTimes = 0;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -56,7 +59,6 @@ public class Spectrum : MonoBehaviour
 
         // scale the spectrum
         this.transform.localScale = new Vector3(0.895f, 2, 1);
-        // this.transform.localScale = new Vector3(0.8f, .9f, .8f);
     }
 
 
@@ -74,25 +76,42 @@ public class Spectrum : MonoBehaviour
             }
         }
 
-        // move newest array into history[0,0]
+        // move newest array into history[0,i]
         for(int i = 0; i < 512; i++) {
             history[0, i] = 600 * Mathf.Sqrt(spectrum[i]);
         }
 
         // loop through history and render
         float yOffset = 0f;
-        for(int i = 0; i < 31; i++) {
+        float scaleFactor = 1.0f;
+        for(int i = 31; i >= 0; i--) {
             for(int j = 0; j < 512; j++) {
                 the_cubes[i, j].transform.localScale =
                     new Vector3(the_cubes[i, j].transform.localScale.x,
                     history[i, j],
                     the_cubes[i, j].transform.localScale.z);
                 the_cubes[i, j].transform.localPosition =
-                    new Vector3(the_cubes[i, j].transform.localPosition.x,
+                    new Vector3(the_cubes[i, j].transform.localPosition.x * scaleFactor,
                     ((history[i, j])/2) + yOffset,
                     the_cubes[i, j].transform.localPosition.z);
             }
             yOffset += 2f;
+            if(TYPE == 0) {
+                scaleFactor -= 0.001f;
+            } else if(TYPE == 1) {
+                scaleFactor += 0.001f;
+            }
         }
+        if(numTimes >= 100) {
+            if(TYPE == 0) {
+                TYPE = 1;
+            } else if(TYPE == 1) {
+                TYPE = 0;
+            }
+            numTimes = 0;
+        } else if(numTimes < 200) {
+            numTimes++;
+        }
+
     } 
 }
