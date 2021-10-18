@@ -18,6 +18,11 @@ public class Waveform : MonoBehaviour
     // to store in the array
     private const int NUM_CUBES = 1024;
 
+    private int TYPE = 0;
+
+    // starting x scale of waveform parent
+    private float SCALE = 0.42f;
+
     // prefab reference
     public GameObject the_pfCube;
     // array of game objects
@@ -60,12 +65,20 @@ public class Waveform : MonoBehaviour
         this.transform.position = new Vector3(this.transform.position.x, 0, this.transform.position.z - 1);
 
         // scale the waveform
-        this.transform.localScale = new Vector3(0.42f, 2, 1);
+        this.transform.localScale = new Vector3(SCALE, 2, 1);
     }
 
     // Update is called once per frame
     void Update()
     {
+        if (Input.GetKeyDown(KeyCode.Space)) {
+            if(TYPE == 0) {
+                TYPE = 1;
+            } else if(TYPE == 1) {
+                TYPE = 0;
+            }
+        }
+
         // local reference to the time domain waveform
         // contains 1024 floating point numbers with the magnitude of waveform
         float[] wf = ChunityAudioInput.the_waveform; 
@@ -82,6 +95,19 @@ public class Waveform : MonoBehaviour
                 new Vector3(the_cubes[i].transform.localPosition.x,
                             MY_SCALE * wf[i],
                             the_cubes[i].transform.localPosition.z);
+            
+            if(TYPE == 0) {
+                // scale the waveform
+                if(SCALE <= 0.7f) {
+                    SCALE += 0.0001f;
+                }
+            } else if(TYPE == 1) {
+                // scale the waveform
+                if(SCALE >= 0.2f) {
+                    SCALE -= 0.0001f;
+                }
+            }
+            this.transform.localScale = new Vector3(SCALE, 2, 1);
         }
     }
 }

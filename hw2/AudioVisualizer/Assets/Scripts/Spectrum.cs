@@ -72,6 +72,7 @@ public class Spectrum : MonoBehaviour
                 TYPE = 0;
             }
         }
+        
         // local reference to the spectrum
         float[] spectrum = ChunityAudioInput.the_spectrum;
 
@@ -102,7 +103,7 @@ public class Spectrum : MonoBehaviour
                     ((history[i, j])/2) + yOffset,
                     the_cubes[i, j].transform.localPosition.z);
             }
-            yOffset += 3f;
+            yOffset += 2f;
             if(TYPE == 0) {
                 scaleFactor -= 0.01f;
             } else if(TYPE == 1) {
