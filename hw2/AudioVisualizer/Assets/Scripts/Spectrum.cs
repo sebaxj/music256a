@@ -35,7 +35,7 @@ public class Spectrum : MonoBehaviour
             
             // color material
             // go.GetComponent<Renderer>().material = new Material(Shader.Find("Unlit/Color")); // sets the color to white?
-            go.GetComponent<Renderer>().material.SetColor("_BaseColor", new Color(1f, 1f, 1f));
+            go.GetComponent<Renderer>().material.SetColor("_BaseColor", new Color(.9f, 1, .9f));
 
             // transform it
             go.transform.position = new Vector3(x, y, z);
@@ -52,10 +52,10 @@ public class Spectrum : MonoBehaviour
         }
 
         // position this
-        this.transform.position = new Vector3(this.transform.position.x + 45, -190, this.transform.position.z);
+        this.transform.position = new Vector3(this.transform.position.x, -190, this.transform.position.z);
 
         // scale the spectrum
-        this.transform.localScale = new Vector3(0.7f, 2, 1);
+        this.transform.localScale = new Vector3(0.8f, 2, 1);
     }
 
     // Update is called once per frame

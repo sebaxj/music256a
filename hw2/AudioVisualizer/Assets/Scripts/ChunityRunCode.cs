@@ -18,7 +18,7 @@ public class ChunityRunCode : MonoBehaviour
         // get the chuck subinstance on the object this script is attached to
         chuck = GetComponent<ChuckSubInstance>();
         // run code
-        //runMic();
+        // runMic();
         runSong();
     }
 
