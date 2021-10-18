@@ -1,150 +1,156 @@
 //
 //
-// Patch
-Impulse i => TwoZero t => TwoZero t2 => OnePole p;
+// MUSICAL STATEMENT /////////////////////////////////////////////////////////////////////////
+Drone imp1;
+Drone imp2;
+Drone imp3;
+Drone imp4;
+Drone imp5;
 
-// formant filters
-p => TwoPole f1 => Gain g;
-p => TwoPole f2 => g;
-p => TwoPole f3 => g;
+spork ~ sporkImpulse();
 
-// reverbs
-g => JCRev r => dac;
-g => JCRev rL => dac.left;
-g => JCRev rR => dac.right;
+// spork beeping
 
-// delays
-g => Delay d1 => Gain g1 => r;
-g => Delay d2 => Gain g2 => rL;
-g => Delay d3 => Gain g3 => rR;
+// spork sweeping panning of a whoosing
+Beep b1;
+spork ~ b1.run();
 
-// connect gains to delays
-g1 => d1; g2 => d2; g3 => d3;
+5::second => now;
 
-// source gain (amplitude of the impulse train)
-0.25 => float sourceGain;
+spork ~ sporkImpulse();
 
-// set filter coefficients
-1.0 => t.b0;  0.0 => t.b1; -1.0 => t.b2;
-1.0 => t2.b0; 0.0 => t2.b1; 1.0 => t2.b2;
+fun void sporkImpulse() {
+    spork ~ imp1.run(50);
+    300::ms => now;
 
-// set gains
-0.1 => g1.gain;	0.1 => g2.gain;	0.1 => g3.gain;
+    spork ~ imp2.run(65);
+    600::ms => now;
 
-// set reverb mix
-0.025 => r.mix;
+    spork ~ imp3.run(69);
+    1200::ms => now;
 
-// set delay max and length
-1.5 :: second => d1.max;
-2.0 :: second => d2.max;
-2.8 :: second => d3.max;
-1.41459 :: second => d1.delay;
-1.97511 :: second => d2.delay;
-2.71793 :: second => d3.delay;
+    spork ~ imp2.run(77);
+    2400::ms => now;
 
-// set two pole filter radii and gain
-0.997 => f1.radius; 0.997 => f2.radius; 0.997 => f3.radius;
-1.0 => f1.gain; 0.8 => f2.gain; 0.6 => f3.gain;
-
-// randomize initial formant frequencies
-Std.mtof(50) => f1.freq;
-Std.mtof(53) => f2.freq;
-Std.mtof(57) => f3.freq;
-
-// variables for interpolating current and target formant frequencies
-400.0 => float f1freq;
-1000.0 => float f2freq;
-2800.0 => float f3freq;
-400.0 => float target_f1freq;
-1000.0 => float target_f2freq;
-2800.0 => float target_f3freq;
-
-// leaky integrator
-0.99 => p.pole;
-1.0 => p.gain;
-
-// variables that control impulse train source
-0.013 => float period;
-0.013 => float targetPeriod;
-0.0 => float modphase;
-0.0001 => float vibratoDepth;
-
-// scale
-[ 0, 1, 5, 7,
-  8, 11, 8, 7,
-  11, 12, 14, 15,
-  19, 17, 20, 24 ] @=> int scale[];
-// names (for printing)
-[ "ut0", "ra0", "fa0", "ut0",
-  "ra0", "mi0", "ra1", "ut1", 
-  "mi0", "ut1", "re1", "mi1", 
-  "ut1", "fa1", "re1", "ut2" ] @=> string names[];
-// current location in scale
-9 => int scalepoint;
-// frequency
-float theFreq;
-
-// spork two concurrent child shreds...
-spork ~ doImpulse(); // generate voice source
-spork ~ doInterpolation( 10::ms ); // interpolate pitch and formants
-
-// main shred loop
-while( true )
-{
-    // determine new formant targets
-    Math.random2f( 230.0, 660.0 ) => target_f1freq;
-    Math.random2f( 800.0, 2300.0 ) => target_f2freq;
-    Math.random2f( 1700.0, 3000.0 ) => target_f3freq;
-
-    // next pitch (random walk the scale)
-    Math.random2(-1,1) + scalepoint => scalepoint;
-    if( scalepoint < 0 ) 0 => scalepoint;
-    if( scalepoint > 15 ) 15 => scalepoint;
-    // compute the frequency
-    32 + scale[scalepoint] => Std.mtof => theFreq;
-    // print things for fun
-    <<< names[scalepoint], theFreq >>>;
-    // calculate corresponding target period
-    1.0 / theFreq  => targetPeriod;
-
-    // wait until next note
-    Math.random2f( 0.2, 0.9 )::second => now;
+    spork ~ imp3.run(81);
+    4800::ms => now;
+}
+//////////////////////////////////////////////////////////////////////////////////////////////
+class Beep {
+    Noise n => Pan2 p => dac;
+    0.1 => n.gain;
+    
+    0.0 => float t;
+    10::ms => dur T;
+    
+    1::second => now;
+    
+    // function to sweep panning
+    fun void run() {
+        while(true) {
+            // pan the sound from left to right
+            Math.sin(t) => p.pan;
+            
+            T / second * 2.5 +=> t;
+            
+            T => now;
+        }
+     }
 }
 
-// entry point for shred: generate source impulse train
-fun void doImpulse()
-{
-    // infinite time-loop
-    while( true )
+class Drone {
+    // Patch
+    Impulse i => TwoZero t => OnePole p;
+
+    // formant filters
+    p => TwoPole f1 => Gain g;
+
+    // reverbs
+    g => JCRev r => dac;
+    g => JCRev rL => dac.left;
+    g => JCRev rR => dac.right;
+
+    // delays
+    g => Delay d1 => Gain g1 => r;
+    g => Delay d2 => Gain g2 => rL;
+    g => Delay d3 => Gain g3 => rR;
+
+    // connect gains to delays
+    g1 => d1; g2 => d2; g3 => d3;
+
+    // source gain (amplitude of the impulse train)
+    0.25 => float sourceGain;
+
+    // set filter coefficients
+    1.0 => t.b0;  0.0 => t.b1; -1.0 => t.b2;
+
+    // set gains
+    0.1 => g1.gain;	0.1 => g2.gain;	0.1 => f1.gain;
+
+    // set reverb mix
+    0.04 => r.mix;
+
+    // set delay max and length
+    1.5 :: second => d1.max;
+    2.0 :: second => d2.max;
+    2.8 :: second => d3.max;
+    1.41459 :: second => d1.delay;
+    1.97511 :: second => d2.delay;
+    2.71793 :: second => d3.delay;
+
+    // set two pole filter radii and gain
+    0.997 => f1.radius; 
+    1.0 => f1.gain; 
+
+    // leaky integrator
+    0.99 => p.pole;
+    1.0 => p.gain;
+
+    // variables that control impulse train source
+    0.013 => float period;
+    0.013 => float targetPeriod;
+    0.0 => float modphase;
+    0.0001 => float vibratoDepth;
+
+    fun void run(int freq) {
+        Std.mtof(freq) => f1.freq;
+        
+        spork ~ doImpulse(); // generate voice source
+        spork ~ sweepGain(1.0);
+        
+        // main shred loop
+        10::second => now;
+    }
+    
+    // function to sweep gain
+    fun void sweepGain(float n) {
+        0 => float t;
+        while(true) {
+            // sweep the gain from 0.0 to n
+            0.0 + Std.fabs(Math.sin(t)) * n => f1.gain;
+            
+            // move to next wave number
+            t + .01  => t;
+            
+            // wait 10 seconds to change filter resonance
+            10::ms => now;
+        }
+}
+
+    // entry point for shred: generate source impulse train
+    fun void doImpulse()
     {
-        // fire impulse
-        sourceGain => i.next;
-        // phase variable
-        modphase + period => modphase;
-        // vibrato depth
-        .0001 => vibratoDepth;
-        // modulate wait time until next impulse: vibrato
-        (period + vibratoDepth*Math.sin(2*pi*modphase*6.0))::second => now;
+        // infinite time-loop
+        while( true )
+        {
+            // fire impulse
+            sourceGain => i.next;
+            // phase variable
+            modphase + period => modphase;
+            // vibrato depth
+            .0001 => vibratoDepth;
+            // modulate wait time until next impulse: vibrato
+            (period + vibratoDepth*Math.sin(2*pi*modphase*6.0))::second => now;
+        }
     }
 }
-
-// entry point for shred: interpolate period and formant frequencies
-fun void doInterpolation( dur T )
-{
-    // percentage progress per time slice
-    0.10 => float slew;
-    // infinite time-loop
-    while( true )
-    {
-        // go towards target period (pitch)
-        (targetPeriod - period) * slew + period => period;
-        // go towards targat formant frequencies
-        (target_f1freq - f1freq) * slew + f1freq => f1freq => f1.freq;
-        (target_f2freq - f2freq) * slew + f2freq => f2freq => f2.freq;
-        (target_f3freq - f3freq) * slew + f3freq => f3freq => f3.freq;
-
-        // interpolation rate
-        T => now;
-    }
-}
-
