@@ -102,8 +102,7 @@ public class Spectrum : MonoBehaviour
                 the_cubes[i, j].transform.localPosition =
                     new Vector3(the_cubes[i, j].transform.localPosition.x * scaleFactor,
                     ((history[i, j])/2) + yOffset,
-                    the_cubes[i, j].transform.localPosition.z);
-                // the_cubes[i, j].GetComponent<Renderer>().material.SetColor("_BaseColor", new Color(255, 255, 255, 0));
+                    the_cubes[i, j].transform.localPosition.z * scaleFactor);
             }
             yOffset += 3f;
             if(TYPE == 0) {
