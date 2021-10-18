@@ -7,17 +7,31 @@ Drone imp3;
 Drone imp4;
 Drone imp5;
 
-spork ~ sporkImpulse();
+sporkImpulse();
 
 // spork beeping
 
 // spork sweeping panning of a whoosing
 Beep b1;
-spork ~ b1.run();
+spork ~ b1.runLeft();
 
 5::second => now;
 
-spork ~ sporkImpulse();
+sporkImpulse();
+
+spork ~ b1.runRight();
+5::second => now;
+
+sporkImpulse();
+
+Beep b2;
+spork ~ b2.runLeft();
+400::ms => now;
+Beep b3;
+spork ~ b3.runLeft();
+200::ms => now;
+spork ~ b2.runRight();
+5::second => now;
 
 fun void sporkImpulse() {
     spork ~ imp1.run(50);
@@ -37,17 +51,40 @@ fun void sporkImpulse() {
 }
 //////////////////////////////////////////////////////////////////////////////////////////////
 class Beep {
-    Noise n => Pan2 p => dac;
-    0.1 => n.gain;
+    SinOsc s => Pan2 p => dac;
+    0.0 => s.gain;
     
     0.0 => float t;
     10::ms => dur T;
     
-    1::second => now;
+    fun void buzz(float src, float target, dur duration, dur misc) {
+        0.1 => s.gain;
+        
+        src => float freq;
+        
+        // calculate steps between src and target
+        duration / misc => float steps;
+        
+        // calculate increment size based on steps between src and target
+        (target - src) / steps => float increment;
+        
+        // to keep track of distance to-go
+        float count;
+        
+        while(count < steps) {
+            freq + increment => freq;
+            1 +=> count;
+            Std.mtof(freq) => s.freq;
+            misc => now;
+        }
+    }
     
-    // function to sweep panning
-    fun void run() {
-        while(true) {
+    // function to sweep panning Left
+    fun void runLeft() {
+        0.1 => s.gain;
+        1::second => now;
+        spork ~ buzz(127, 20, 1::second, 1::ms);
+        while(Math.sin(t) < 0.99) {
             // pan the sound from left to right
             Math.sin(t) => p.pan;
             
@@ -55,6 +92,24 @@ class Beep {
             
             T => now;
         }
+        0.0 => s.gain;
+     }
+     
+    // function to sweep panning Right
+    fun void runRight() {
+        0.1 => s.gain;
+        1::second => now;
+        0.99 => t;
+        spork ~ buzz(20, 127, 1::second, 1::ms);
+        while(Math.sin(t) > -0.99) {
+            // pan the sound from left to right
+            Math.sin(t) => p.pan;
+            
+            T / second * 2.5 +=> t;
+            
+            T => now;
+        }
+        0.0 => s.gain;
      }
 }
 
