@@ -15,7 +15,7 @@ public class Spectrum : MonoBehaviour
     public GameObject the_pfCube;
 
     // array of cubes
-    public GameObject[] the_cubes = new GameObject[512];
+    public GameObject[,] the_cubes = new GameObject[32, 512];
 
     // spectrum history matrix
     public float[,] history = new float[32, 512];
@@ -28,25 +28,27 @@ public class Spectrum : MonoBehaviour
         // increment
         float xIncrement = the_pfCube.transform.localScale.x * 2;
         // place the cubes initially
-        for ( int i = 0; i < the_cubes.Length; i++ )
-        {
-            // instantiate
-            GameObject go = Instantiate(the_pfCube);
-            
-            // color material
-            go.GetComponent<Renderer>().material.SetColor("_BaseColor", new Color(256, 256, 256));
-            // transform it
-            go.transform.position = new Vector3(x, y, z);
-            // increment x
-            x += xIncrement;
-            // scale it to be 2x wider
-            go.transform.localScale = new Vector3(2, 0, 1);
-            // give it name
-            go.name = "bin" + i;
-            // set this as a child of this Spectrum
-            go.transform.parent = this.transform;
-            // put into array
-            the_cubes[i] = go;
+        for(int i = 0; i < 32; i++) {
+            for (int j = 0; j < 512; j++) {
+                // instantiate
+                GameObject go = Instantiate(the_pfCube);
+                
+                // color material
+                go.GetComponent<Renderer>().material.SetColor("_BaseColor", new Color(256, 256, 256));
+                // transform it
+                go.transform.position = new Vector3(x, y, z);
+                // increment x
+                x += xIncrement;
+                // scale it to be 2x wider
+                go.transform.localScale = new Vector3(2, 0, 1);
+                // give it name
+                go.name = "bin" + i + ":" + j;
+                // set this as a child of this Spectrum
+                go.transform.parent = this.transform;
+                // put into array
+                the_cubes[i, j] = go;
+            }
+            x = -512;
         }
 
         // position this
@@ -66,30 +68,31 @@ public class Spectrum : MonoBehaviour
 
         // move spectrum history over by one index to make room for newest
         for(int i = 30; i >= 0; i--) {
-            for(int j = 0; j < the_cubes.Length; j++) {
+            for(int j = 0; j < 512; j++) {
                 // move array of [i, j] to [i + 1, j]
                 history[i + 1, j] = history[i, j]; 
             }
         }
 
         // move newest array into history[0,0]
-        for(int i = 0; i < the_cubes.Length; i++) {
+        for(int i = 0; i < 512; i++) {
             history[0, i] = 600 * Mathf.Sqrt(spectrum[i]);
         }
 
         // loop through history and render
-        for(int i = 31; i >= 0; i--) {
-            for(int j = 0; j < the_cubes.Length; j++) {
-                the_cubes[j].transform.localScale =
-                    new Vector3(the_cubes[j].transform.localScale.x,
-                    history[0, j],
-                    the_cubes[j].transform.localScale.z);
-                the_cubes[j].transform.localPosition =
-                    new Vector3(the_cubes[j].transform.localPosition.x,
-                    (history[0, j])/2,
-                    the_cubes[j].transform.localPosition.z);
+        float yOffset = 0f;
+        for(int i = 0; i < 31; i++) {
+            for(int j = 0; j < 512; j++) {
+                the_cubes[i, j].transform.localScale =
+                    new Vector3(the_cubes[i, j].transform.localScale.x,
+                    history[i, j],
+                    the_cubes[i, j].transform.localScale.z);
+                the_cubes[i, j].transform.localPosition =
+                    new Vector3(the_cubes[i, j].transform.localPosition.x,
+                    ((history[i, j])/2) + yOffset,
+                    the_cubes[i, j].transform.localPosition.z);
             }
+            yOffset += 2f;
         }
-    }
-    
+    } 
 }

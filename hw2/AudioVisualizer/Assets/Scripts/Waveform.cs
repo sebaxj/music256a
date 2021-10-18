@@ -57,7 +57,7 @@ public class Waveform : MonoBehaviour
         }
 
         // position this ('this' refers to the waveform)
-        this.transform.position = new Vector3(this.transform.position.x, 0, this.transform.position.z);
+        this.transform.position = new Vector3(this.transform.position.x, 0, this.transform.position.z - 1);
 
         // scale the waveform
         this.transform.localScale = new Vector3(0.42f, 2, 1);
