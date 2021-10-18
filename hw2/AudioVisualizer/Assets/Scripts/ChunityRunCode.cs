@@ -65,10 +65,6 @@ public class ChunityRunCode : MonoBehaviour
             Beep b19;
             Beep b20;
 
-            adc => blackhole; // turn off microphone
-
-            5::second => now; // wait for all sound to dissipate
-
             spork ~ drone(50);
             5::second => now;
 

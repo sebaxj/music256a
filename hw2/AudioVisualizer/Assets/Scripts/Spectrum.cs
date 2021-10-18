@@ -36,7 +36,7 @@ public class Spectrum : MonoBehaviour
                 GameObject go = Instantiate(the_pfCube);
                 
                 // color material
-                go.GetComponent<Renderer>().material.SetColor("_BaseColor", new Color(255, 255, 255, 0));
+                go.GetComponent<Renderer>().material.SetColor("_BaseColor", new Color(1.0f, 1.0f, 1.0f, 0.0f));
                 // transform it
                 go.transform.position = new Vector3(x, y, z);
                 // increment x
