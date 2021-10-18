@@ -43,7 +43,7 @@ public class Waveform : MonoBehaviour
             // instantiate a prefab game object
             GameObject go = Instantiate(the_pfCube);
             // color material
-            go.GetComponent<Renderer>().material.SetColor("_BaseColor", new Color(.5f, 1, .5f));
+            go.GetComponent<Renderer>().material.SetColor("_BaseColor", new Color(255, 0, 228));
             // default position
             go.transform.position = new Vector3(x, y, z);
             // increment the x position

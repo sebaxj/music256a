@@ -34,9 +34,7 @@ public class Spectrum : MonoBehaviour
             GameObject go = Instantiate(the_pfCube);
             
             // color material
-            // go.GetComponent<Renderer>().material = new Material(Shader.Find("Unlit/Color")); // sets the color to white?
-            go.GetComponent<Renderer>().material.SetColor("_BaseColor", new Color(.9f, 1, .9f));
-
+            go.GetComponent<Renderer>().material.SetColor("_BaseColor", new Color(256, 256, 256));
             // transform it
             go.transform.position = new Vector3(x, y, z);
             // increment x
@@ -52,10 +50,10 @@ public class Spectrum : MonoBehaviour
         }
 
         // position this
-        this.transform.position = new Vector3(this.transform.position.x, -190, this.transform.position.z);
+        this.transform.position = new Vector3(this.transform.position.x, -257, this.transform.position.z);
 
         // scale the spectrum
-        this.transform.localScale = new Vector3(0.8f, 2, 1);
+        this.transform.localScale = new Vector3(0.895f, 2, 1);
     }
 
     // Update is called once per frame
