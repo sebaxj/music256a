@@ -84,7 +84,7 @@ public class Spectrum : MonoBehaviour
         // loop through history and render
         float yOffset = 0f;
         float scaleFactor = 1.0f;
-        for(int i = 31; i >= 0; i--) {
+        for(int i = 0; i < 32; i++) {
             for(int j = 0; j < 512; j++) {
                 the_cubes[i, j].transform.localScale =
                     new Vector3(the_cubes[i, j].transform.localScale.x,
@@ -95,21 +95,21 @@ public class Spectrum : MonoBehaviour
                     ((history[i, j])/2) + yOffset,
                     the_cubes[i, j].transform.localPosition.z);
             }
-            yOffset += 2f;
+            yOffset += 1f;
             if(TYPE == 0) {
-                scaleFactor -= 0.001f;
+                scaleFactor -= 0.01f;
             } else if(TYPE == 1) {
-                scaleFactor += 0.001f;
+                scaleFactor += 0.01f;
             }
         }
-        if(numTimes >= 100) {
+        if(numTimes >= 50) {
             if(TYPE == 0) {
                 TYPE = 1;
             } else if(TYPE == 1) {
                 TYPE = 0;
             }
             numTimes = 0;
-        } else if(numTimes < 200) {
+        } else if(numTimes < 50) {
             numTimes++;
         }
 
