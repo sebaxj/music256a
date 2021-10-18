@@ -54,27 +54,42 @@ public class Spectrum : MonoBehaviour
 
         // scale the spectrum
         this.transform.localScale = new Vector3(0.895f, 2, 1);
+        // this.transform.localScale = new Vector3(0.8f, .9f, .8f);
     }
+
 
     // Update is called once per frame
     void Update()
     {
-        // local refernce to the spectrum
+        // local reference to the spectrum
         float[] spectrum = ChunityAudioInput.the_spectrum;
 
-        // deal with spectrum history
+        // move spectrum history over by one index to make room for newest
+        for(int i = 30; i >= 0; i--) {
+            for(int j = 0; j < the_cubes.Length; j++) {
+                // move array of [i, j] to [i + 1, j]
+                history[i + 1, j] = history[i, j]; 
+            }
+        }
 
-        for( int i = 0; i < the_cubes.Length; i++ )
-        {
-            float y = 600 * Mathf.Sqrt(spectrum[i]);
-            the_cubes[i].transform.localScale =
-                new Vector3(the_cubes[i].transform.localScale.x,
-                y,
-                the_cubes[i].transform.localScale.z);
-            the_cubes[i].transform.localPosition =
-                new Vector3(the_cubes[i].transform.localPosition.x,
-                y/2,
-                the_cubes[i].transform.localPosition.z);
+        // move newest array into history[0,0]
+        for(int i = 0; i < the_cubes.Length; i++) {
+            history[0, i] = 600 * Mathf.Sqrt(spectrum[i]);
+        }
+
+        // loop through history and render
+        for(int i = 31; i >= 0; i--) {
+            for(int j = 0; j < the_cubes.Length; j++) {
+                the_cubes[j].transform.localScale =
+                    new Vector3(the_cubes[j].transform.localScale.x,
+                    history[0, j],
+                    the_cubes[j].transform.localScale.z);
+                the_cubes[j].transform.localPosition =
+                    new Vector3(the_cubes[j].transform.localPosition.x,
+                    (history[0, j])/2,
+                    the_cubes[j].transform.localPosition.z);
+            }
         }
     }
+    
 }
