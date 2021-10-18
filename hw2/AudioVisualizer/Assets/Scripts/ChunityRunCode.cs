@@ -30,16 +30,6 @@ public class ChunityRunCode : MonoBehaviour
         );
     }
 
-    void runDope()
-    {
-        // run code -- this constructs a sound loop
-        chuck.RunCode(
-            @"SndBuf buffy => dac;
-              ""special:dope"" => buffy.read;
-              while( true ) { 0 => buffy.pos; 400::ms => now; }"
-        );
-    }
-
     void runSong()
     {
         // run code -- this constructs a sound loop

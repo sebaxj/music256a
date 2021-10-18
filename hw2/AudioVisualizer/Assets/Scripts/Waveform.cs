@@ -96,17 +96,17 @@ public class Waveform : MonoBehaviour
                             MY_SCALE * wf[i],
                             the_cubes[i].transform.localPosition.z);
             
-            if(TYPE == 0) {
-                // scale the waveform
-                if(SCALE <= 0.7f) {
-                    SCALE += 0.0001f;
-                }
-            } else if(TYPE == 1) {
-                // scale the waveform
-                if(SCALE >= 0.2f) {
-                    SCALE -= 0.0001f;
-                }
-            }
+            // if(TYPE == 0) {
+            //     // scale the waveform
+            //     if(SCALE <= 0.7f) {
+            //         SCALE += 0.0001f;
+            //     }
+            // } else if(TYPE == 1) {
+            //     // scale the waveform
+            //     if(SCALE >= 0.2f) {
+            //         SCALE -= 0.0001f;
+            //     }
+            // }
             this.transform.localScale = new Vector3(SCALE, 2, 1);
         }
     }

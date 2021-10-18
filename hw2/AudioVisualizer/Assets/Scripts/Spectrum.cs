@@ -20,8 +20,7 @@ public class Spectrum : MonoBehaviour
     // spectrum history matrix
     public float[,] history = new float[32, 512];
 
-    private int TYPE = 0;
-    private int numTimes = 0;
+    private int TYPE = 2;
 
     // Start is called before the first frame update
     void Start()
@@ -37,7 +36,7 @@ public class Spectrum : MonoBehaviour
                 GameObject go = Instantiate(the_pfCube);
                 
                 // color material
-                go.GetComponent<Renderer>().material.SetColor("_BaseColor", new Color(256, 256, 256));
+                go.GetComponent<Renderer>().material.SetColor("_BaseColor", new Color(255, 255, 255, 0));
                 // transform it
                 go.transform.position = new Vector3(x, y, z);
                 // increment x
@@ -66,13 +65,15 @@ public class Spectrum : MonoBehaviour
     void Update()
     {
         if (Input.GetKeyDown(KeyCode.Space)) {
-            if(TYPE == 0) {
+            if(TYPE == 2) {
+                TYPE = 0;
+            } else if(TYPE == 0) {
                 TYPE = 1;
             } else if(TYPE == 1) {
                 TYPE = 0;
             }
         }
-        
+
         // local reference to the spectrum
         float[] spectrum = ChunityAudioInput.the_spectrum;
 
@@ -102,8 +103,9 @@ public class Spectrum : MonoBehaviour
                     new Vector3(the_cubes[i, j].transform.localPosition.x * scaleFactor,
                     ((history[i, j])/2) + yOffset,
                     the_cubes[i, j].transform.localPosition.z);
+                // the_cubes[i, j].GetComponent<Renderer>().material.SetColor("_BaseColor", new Color(255, 255, 255, 0));
             }
-            yOffset += 2f;
+            yOffset += 3f;
             if(TYPE == 0) {
                 scaleFactor -= 0.01f;
             } else if(TYPE == 1) {
