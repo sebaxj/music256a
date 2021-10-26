@@ -31,3 +31,26 @@ hw2/AudioVisualizer/Builds/*
 hw2/assets/milestone2.mov
 hw2/assets/visualizer.zip
 hw2/assets/final/*
+hw3/AudioVisualSequencer/Library/*
+hw3/AudioVisualSequencer/Logs/*
+hw3/AudioVisualSequencer/Packages/*
+hw3/AudioVisualSequencer/ProjectSettings/*
+hw3/AudioVisualSequencer/UserSettings/*
+hw3/AudioVisualSequencer/Assets/Chunity/*
+hw3/AudioVisualSequencer/Assets/Chunity.meta
+hw3/AudioVisualSequencer/Assets/Materials/*
+hw3/AudioVisualSequencer/Assets/Materials.meta
+hw3/AudioVisualSequencer/Assets/Meshtint\ Free\ Chicken\ Mega\ Toon\ Series/*
+hw3/AudioVisualSequencer/Assets/Meshtint\ Free\ Chicken\ Mega\ Toon\ Series.meta
+hw3/AudioVisualSequencer/Assets/Prefabs/*
+hw3/AudioVisualSequencer/Assets/Prefabs.meta
+hw3/AudioVisualSequencer/Assets/Scenes/*
+hw3/AudioVisualSequencer/Assets/Scenes.meta
+hw3/AudioVisualSequencer/Assets/StreamingAssets/*
+hw3/AudioVisualSequencer/Assets/StreamingAssets.meta
+hw3/AudioVisualSequencer/Assets/Settings/*
+hw3/AudioVisualSequencer/Assets/Settings.meta
+hw3/AudioVisualSequencer/Assets/Presets/*
+hw3/AudioVisualSequencer/Assets/Presets.meta
+hw3/AudioVisualSequencer/Builds/*
+
