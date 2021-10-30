@@ -1,5 +1,6 @@
 Notes/*
 .DS_Store
+*.swp
 chunity-tutorial/*
 hw2/AudioVisualizer/Library/*
 hw2/AudioVisualizer/Logs/*
