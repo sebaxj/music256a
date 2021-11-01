@@ -9,13 +9,13 @@ public class Clicker : MonoBehaviour
     public bool clicked = false;
 
     // prefab reference
-    public GameObject the_pfCube;
+    public GameObject the_pfCell;
 
     // num of grid cells
     private const int NUM_CELLS = 2160;
 
     // array of game objects
-    public GameObject[] the_cubes = new GameObject[NUM_CELLS];
+    public GameObject[] grid = new GameObject[NUM_CELLS];
 
     // Start is called before the first frame update
     void Start()
@@ -29,7 +29,7 @@ public class Clicker : MonoBehaviour
 
         // the x increment is calculated as a function of the local scale of the cube
         // to that they are placed exactly side by side
-        float xIncrement = the_pfCube.transform.localScale.x;
+        float xIncrement = the_pfCell.transform.localScale.x;
 
         for(int i = 0; i < NUM_CELLS; i++)
         {
@@ -55,7 +55,7 @@ public class Clicker : MonoBehaviour
                 y += xIncrement; 
             }
             // instantiate a prefab game object
-            GameObject go = Instantiate(the_pfCube);
+            GameObject go = Instantiate(the_pfCell);
             // color material
             go.GetComponent<Renderer>().material.color = Color.black;
             // default position
@@ -64,13 +64,13 @@ public class Clicker : MonoBehaviour
             x += xIncrement;
             // give a name!
             go.name = "cube" + i;
-            Debug.Log(go.name);
             // set a child of this waveform
             go.transform.parent = this.transform;
             // put into array
-            the_cubes[i] = go; 
+            grid[i] = go; 
         }
-        // position this ('this' refers to the waveform)
+        
+        // position this ('this' refers to the grid)
         this.transform.position = new Vector3(this.transform.position.x, 0.5f, this.transform.position.z);
     }
 
@@ -79,24 +79,18 @@ public class Clicker : MonoBehaviour
     {
         if(Input.GetMouseButtonDown(0))
         {
-            if(!clicked) {
-                // for(int i = 0; i < the_cubes.Length; i++) {
-                //     the_cubes[i].GetComponent<Renderer>().material.color = Color.yellow;
-                // }
+            if(!clicked) { // if it is black (hasn't been clicked -> black)
                 Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
                 RaycastHit hit;
-                if (Physics.Raycast(ray, out hit, 100)) {
-                    GetComponent<Renderer>().material.color = Color.yellow;
+                if (Physics.Raycast(ray, out hit)) {
+                    hit.collider.GetComponent<Renderer>().material.color = Color.yellow;
                 }
                 clicked = true;
-            } else {
-                // for(int i = 0; i < the_cubes.Length; i++) {
-                //     the_cubes[i].GetComponent<Renderer>().material.color = Color.black;
-                // }
+            } else { // if it is black (has been clicked -> black)
                 Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
                 RaycastHit hit;
-                if (Physics.Raycast(ray, out hit, 100)) {
-                    GetComponent<Renderer>().material.color = Color.black;
+                if (Physics.Raycast(ray, out hit)) {
+                    hit.collider.GetComponent<Renderer>().material.color = Color.black;
                 }
                 clicked = false;
             }
