@@ -17,6 +17,10 @@ public class Clicker : MonoBehaviour
     // array of game objects
     public GameObject[] grid = new GameObject[NUM_CELLS];
 
+    // --------- AUDIO -------------
+    // int sync
+    private ChuckIntSyncer m_ckCurrentCell;
+
     // Start is called before the first frame update
     void Start()
     {    
@@ -72,11 +76,19 @@ public class Clicker : MonoBehaviour
         
         // position this ('this' refers to the grid)
         this.transform.position = new Vector3(this.transform.position.x, 0.5f, this.transform.position.z);
+
+        // run the sequencer
+        GetComponent<ChuckSubInstance>().RunFile("ecg_audio.ck", true);
+
+        // add the int sync
+        m_ckCurrentCell = gameObject.AddComponent<ChuckIntSyncer>();
+        m_ckCurrentCell.SyncInt(GetComponent<ChuckSubInstance>(), "currentCell");
     }
 
     // Update is called once per frame
     void Update()
     {
+        // edit
         if(Input.GetMouseButtonDown(0))
         {
             if(!clicked) { // if it is black (hasn't been clicked -> black)
@@ -94,8 +106,20 @@ public class Clicker : MonoBehaviour
                 }
                 clicked = false;
             }
+            // send edit
+        }
 
+        // move playhead
+        // update the playhead using info from ChucK's playheadPos
+        grid[m_ckCurrentCell.GetCurrentValue() + 360].GetComponent<Renderer>().material.color = Color.white;
 
+        // make previous cell black
+        if(m_ckCurrentCell.GetCurrentValue() == 1) {
+            grid[360].GetComponent<Renderer>().material.color = Color.black;
+        } else if(m_ckCurrentCell.GetCurrentValue() == 60) {
+            grid[419].GetComponent<Renderer>().material.color = Color.black;
+        } else {
+            grid[m_ckCurrentCell.GetCurrentValue() + 360 - 1].GetComponent<Renderer>().material.color = Color.black;
         }
     }
 }
