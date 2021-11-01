@@ -2,6 +2,18 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+// TODO
+// 1. Refactor code to be on a matrix grid
+// 2. Fix ChucK code to properly play sequenced notes off the matrix grid.
+// 3. Keep track of state of each cell with more variables to change speed, sound etc.
+// 4. Fix glitches with cell colors
+// 5. Add functionality with other vitals to add other instrument
+// 6. Expand size of everything to have more cells (better resolution, longer sequence)
+// 7. Fix click ability to use a "wand" technique to be able to draw
+// 9. Fix colors with lights (yellow more yellow, black more black, white more white)
+// 10. Refactor code
+// 11. Make it look more "retro"
+
 public class Clicker : MonoBehaviour
 {
     // Initialize Vars
