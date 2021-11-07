@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 // TODO
-// 1. Refactor code to be on a matrix grid
+// 1. Refactor code to be on a matrix grid  
 // 2. Fix ChucK code to properly play sequenced notes off the matrix grid.
 // 3. Keep track of state of each cell with more variables to change speed, sound etc.
 // 4. Fix glitches with cell colors
@@ -23,11 +23,12 @@ public class Clicker : MonoBehaviour
     // prefab reference
     public GameObject the_pfCell;
 
-    // num of grid cells
-    private const int NUM_CELLS = 2160;
+    // number of columns and rows of the grid
+    private const int NUM_COLS = 80;
+    private const int NUM_ROWS = 48;
 
     // array of game objects
-    public GameObject[] grid = new GameObject[NUM_CELLS];
+    public GameObject[,] grid = new GameObject[NUM_COLS, NUM_ROWS];
 
     // --------- AUDIO -------------
     // int sync
@@ -41,49 +42,44 @@ public class Clicker : MonoBehaviour
         // y axis controls "height" of objects from top to bottom
         float x = 0, y = 0, z = 0; 
 
-        int cols = 60;
-
-        // the x increment is calculated as a function of the local scale of the cube
+        // the x increment is calculated as a function of the local scale of the qud
         // to that they are placed exactly side by side
-        float xIncrement = the_pfCell.transform.localScale.x;
+        float Increment = the_pfCell.transform.localScale.x;
 
-        for(int i = 0; i < NUM_CELLS; i++)
-        {
-            if(i == 1 * cols || i == 2 * cols
-            || i == 3 * cols || i == 4 * cols
-            || i == 5 * cols || i == 6 * cols
-            || i == 7 * cols || i == 8 * cols
-            || i == 9 * cols || i == 10 * cols
-            || i == 11 * cols || i == 12 * cols
-            || i == 13 * cols || i == 14 * cols
-            || i == 15 * cols || i == 16 * cols
-            || i == 17 * cols || i == 18 * cols
-            || i == 19 * cols || i == 20 * cols
-            || i == 21 * cols || i == 22 * cols
-            || i == 23 * cols || i == 24 * cols
-            || i == 25 * cols || i == 26 * cols
-            || i == 27 * cols || i == 28 * cols
-            || i == 29 * cols || i == 30 * cols
-            || i == 31 * cols || i == 32 * cols
-            || i == 33 * cols || i == 34 * cols
-            || i == 35 * cols) {
-                x = 0;
-                y += xIncrement; 
+        int i = 0;
+
+        for(int col = 0; col < NUM_COLS; col++) {
+            for(int row = 0; row < NUM_ROWS; row++) {
+                // instantiate a prefab game object
+                GameObject go = Instantiate(the_pfCell);
+
+                // color material
+                go.GetComponent<Renderer>().material.color = Color.black;
+
+                // default position
+                go.transform.position = new Vector3(x, y, z);
+
+                // increment the y position
+                y += Increment;
+
+                // give a name!
+                go.name = "cube" + i;
+
+                // set a child of this Game Object (Grid)
+                go.transform.parent = this.transform;
+
+                // put into array
+                grid[col, row] = go; 
+
+                // increment go count
+                i++;
             }
-            // instantiate a prefab game object
-            GameObject go = Instantiate(the_pfCell);
-            // color material
-            go.GetComponent<Renderer>().material.color = Color.black;
-            // default position
-            go.transform.position = new Vector3(x, y, z);
-            // increment the x position
-            x += xIncrement;
-            // give a name!
-            go.name = "cube" + i;
-            // set a child of this waveform
-            go.transform.parent = this.transform;
-            // put into array
-            grid[i] = go; 
+            // reset y position
+            y = 0f;
+
+            // increment x position
+            x += Increment;
+
         }
         
         // position this ('this' refers to the grid)
@@ -121,17 +117,17 @@ public class Clicker : MonoBehaviour
             // send edit
         }
 
-        // move playhead
-        // update the playhead using info from ChucK's playheadPos
-        grid[m_ckCurrentCell.GetCurrentValue() + 360].GetComponent<Renderer>().material.color = Color.white;
+        // // move playhead
+        // // update the playhead using info from ChucK's playheadPos
+        // grid[m_ckCurrentCell.GetCurrentValue() + 360].GetComponent<Renderer>().material.color = Color.white;
 
-        // make previous cell black
-        if(m_ckCurrentCell.GetCurrentValue() == 1) {
-            grid[360].GetComponent<Renderer>().material.color = Color.black;
-        } else if(m_ckCurrentCell.GetCurrentValue() == 60) {
-            grid[419].GetComponent<Renderer>().material.color = Color.black;
-        } else {
-            grid[m_ckCurrentCell.GetCurrentValue() + 360 - 1].GetComponent<Renderer>().material.color = Color.black;
-        }
+        // // make previous cell black
+        // if(m_ckCurrentCell.GetCurrentValue() == 1) {
+        //     grid[360].GetComponent<Renderer>().material.color = Color.black;
+        // } else if(m_ckCurrentCell.GetCurrentValue() == 60) {
+        //     grid[419].GetComponent<Renderer>().material.color = Color.black;
+        // } else {
+        //     grid[m_ckCurrentCell.GetCurrentValue() + 360 - 1].GetComponent<Renderer>().material.color = Color.black;
+        // }
     }
 }
