@@ -37,9 +37,9 @@ public class Clicker : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {    
-        // x is axis which controls "width" of waveform from left to right
-        // z axis controls the depth of objects relative to the camera (pos is more backwards)
-        // y axis controls "height" of objects from top to bottom
+        // x is axis which controls height of bottom to top (0 is origin)
+        // z axis controls the depth of objects relative to the camera (pos is more backwards relative to the camera)
+        // y axis controls width of objects from left to right
         float x = 0, y = 0, z = 0; 
 
         // the x increment is calculated as a function of the local scale of the qud
@@ -90,7 +90,7 @@ public class Clicker : MonoBehaviour
 
         // add the int sync
         m_ckCurrentCell = gameObject.AddComponent<ChuckIntSyncer>();
-        m_ckCurrentCell.SyncInt(GetComponent<ChuckSubInstance>(), "currentCell");
+        m_ckCurrentCell.SyncInt(GetComponent<ChuckSubInstance>(), "cur_COL");
     }
 
     // Update is called once per frame
@@ -117,9 +117,14 @@ public class Clicker : MonoBehaviour
             // send edit
         }
 
-        // // move playhead
-        // // update the playhead using info from ChucK's playheadPos
-        // grid[m_ckCurrentCell.GetCurrentValue() + 360].GetComponent<Renderer>().material.color = Color.white;
+        // move playhead
+        // update the playhead using info from ChucK's playheadPos
+        grid[m_ckCurrentCell.GetCurrentValue(), 12].GetComponent<Renderer>().material.color = Color.white;
+
+        // make previous cell black
+        if(m_ckCurrentCell.GetCurrentValue() != 0) {
+            grid[m_ckCurrentCell.GetCurrentValue() - 1, 12].GetComponent<Renderer>().material.color = Color.black;
+        }
 
         // // make previous cell black
         // if(m_ckCurrentCell.GetCurrentValue() == 1) {
