@@ -34,6 +34,12 @@ public class Clicker : MonoBehaviour
     // int sync
     private ChuckIntSyncer m_ckCurrentCell;
 
+    // --------- SHARED ------------
+    // col sync
+    // row syn
+    private int edit_COL;
+    private int edit_ROW;
+
     // Start is called before the first frame update
     void Start()
     {    
@@ -106,7 +112,7 @@ public class Clicker : MonoBehaviour
                     hit.collider.GetComponent<Renderer>().material.color = Color.yellow;
                 }
                 clicked = true;
-            } else { // if it is black (has been clicked -> black)
+            } else { // if it is yellow (has been clicked -> yellow)
                 Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
                 RaycastHit hit;
                 if (Physics.Raycast(ray, out hit)) {
@@ -114,25 +120,26 @@ public class Clicker : MonoBehaviour
                 }
                 clicked = false;
             }
+
+            // cycle through grid array until cube with name matching name of hit.collider
+            // set edit_COL and edit_ROW to equal to hit.collider quad
+            
             // send edit
+            GetComponent<ChuckSubInstance>().SetInt("edit_COL", edit_COL);
+            GetComponent<ChuckSubInstance>().SetInt("edit_ROW", edit_ROW);
+            GetComponent<ChuckSubInstance>().BroadcastEvent("editHappened");
+        }
+
+        // make previous cell black
+        if(m_ckCurrentCell.GetCurrentValue() == 0) {
+            grid[79, 12].GetComponent<Renderer>().material.color = Color.black;
+        } else {
+            grid[m_ckCurrentCell.GetCurrentValue() - 1, 12].GetComponent<Renderer>().material.color = Color.black;
         }
 
         // move playhead
         // update the playhead using info from ChucK's playheadPos
         grid[m_ckCurrentCell.GetCurrentValue(), 12].GetComponent<Renderer>().material.color = Color.white;
 
-        // make previous cell black
-        if(m_ckCurrentCell.GetCurrentValue() != 0) {
-            grid[m_ckCurrentCell.GetCurrentValue() - 1, 12].GetComponent<Renderer>().material.color = Color.black;
-        }
-
-        // // make previous cell black
-        // if(m_ckCurrentCell.GetCurrentValue() == 1) {
-        //     grid[360].GetComponent<Renderer>().material.color = Color.black;
-        // } else if(m_ckCurrentCell.GetCurrentValue() == 60) {
-        //     grid[419].GetComponent<Renderer>().material.color = Color.black;
-        // } else {
-        //     grid[m_ckCurrentCell.GetCurrentValue() + 360 - 1].GetComponent<Renderer>().material.color = Color.black;
-        // }
     }
 }
