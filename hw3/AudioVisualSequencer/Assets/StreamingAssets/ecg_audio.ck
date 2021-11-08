@@ -29,28 +29,19 @@ int grid[NUM_COLS][NUM_ROWS];
 int saved[NUM_COLS][NUM_ROWS];
 
 // patch
-SinOsc s => ADSR e => dac;
 TriOsc drone => dac;
 BASE_NOTE => drone.freq;
 droneGain => drone.gain;
-
-// set A, D, S, and R
-e.set( 10::ms, 8::ms, .5, 500::ms );
-
-// set gain
-0 => s.gain;
         
 // spork edit listener
 spork ~ listenForEdit();
 spork ~ listenForDrone();
- 
-1 => int first;
--1 => int sec;
+
 
 
 ///////////////////////////
 // seeding
-//1 => grid[0][0];
+//1 => saved[0][0];
 
 
 
@@ -64,14 +55,26 @@ while(true) {
       // play sound corresponding to frequency
         // BASE_NOTE + filled row
         
-        for(0 => int cur_ROW; cur_ROW < NUM_ROWS; cur_ROW++) {
-            if(grid[cur_COL][cur_ROW] == 1) {
-                spork ~ playSound(cur_ROW);
+         if(version == 0) {
+            
+            for(0 => int cur_ROW; cur_ROW < NUM_ROWS; cur_ROW++) {
+                if(grid[cur_COL][cur_ROW] == 1) {
+                    spork ~ playSound(cur_ROW);
+                }
+                // advance time by duration of one beat 
+                BEAT => now;
             }
-            // advance time by duration of one beat 
-            BEAT => now;
+            
+        } else if(version == 1) {
+            for(0 => int cur_ROW; cur_ROW < NUM_ROWS; cur_ROW++) {
+                if(saved[cur_COL][cur_ROW] == 1) {
+                    spork ~ playSound(cur_ROW);
+                }
+                // advance time by duration of one beat 
+                BEAT => now;
+            }
         }
-             
+        
     // increment to next column           
     cur_COL++;
      
@@ -82,6 +85,14 @@ while(true) {
 
 // function to play sound
 fun void playSound(int frequency) {
+    
+    SinOsc s => ADSR e => dac;
+    
+    // set A, D, S, and R
+    e.set( 10::ms, 8::ms, .5, 500::ms );
+
+    // set gain
+    0 => s.gain;
     
     .5 => s.gain;
     Std.mtof(60 + frequency) => s.freq;
@@ -114,6 +125,7 @@ fun void listenForEdit() {
         // wait for event
         editHappened => now;
         
+       
         if(reset == 0) {
             // update grid with edit
             if(grid[edit_COL][edit_ROW] == 0) {
@@ -129,22 +141,8 @@ fun void listenForEdit() {
             }
         }
         
-        if(save == 1) {
-            for(0 => int x; x < NUM_COLS; x++) {
-                for(0 => int y; y < NUM_ROWS; y++) {
-                    grid[x][y] => saved[x][y];
-                }
-            }   
-        }
         
-        if(version == 1) {
-            for(0 => int x; x < NUM_COLS; x++) {
-                for(0 => int y; y < NUM_ROWS; y++) {
-                    saved[x][y] => grid[x][y];
-                }
-            }   
-        }
-        
+
         // set droneGain from Unity (either 0 for off, of 0.2 for on)
         droneGain => drone.gain;
     }

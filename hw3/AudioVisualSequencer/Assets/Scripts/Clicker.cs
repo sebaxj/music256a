@@ -4,20 +4,6 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEditor;
 
-// TODO
-// 1. Refactor code to be on a matrix grid (DONE)
-// 2. Fix ChucK code to properly play sequenced notes off the matrix grid. (DONE)
-// 3. Keep track of state of each cell with more variables to change speed, sound etc. (IF TIME)
-// 4. Fix glitches with cell colors (DONE)
-// 5. Add functionality with other vitals to add other instrument
-    // i. RESET button (DONE)
-    // ii. LOAD/SAVE button
-    // iii. DRONE button (DONE)
-// 6. Expand size of everything to have more cells (better resolution, longer sequence) (DONE)
-// 7. Fix colors with lights (yellow more yellow, black more black, white more white) (IF TIME)
-// 8. Refactor code (IF TIME)
-// 9. Make it look more "retro" (IF TIME)
-
 public class Clicker : MonoBehaviour
 {
     // Initialize Vars //
@@ -41,6 +27,7 @@ public class Clicker : MonoBehaviour
     // array of game objects to store saved sequence
     public int[,] SAVE1 = new int[NUM_COLS, NUM_ROWS];
     private int saved = 0; // to keep track of save-state
+    private int SAVED = 0;
 
 
 
@@ -73,7 +60,7 @@ public class Clicker : MonoBehaviour
         // y axis controls width of objects from left to right
         float x = 0, y = 0, z = 0; 
 
-        // the x increment is calculated as a function of the local scale of the qud
+        // the x increment is calculated as a function of the local scale of the quad
         // to that they are placed exactly side by side
         float Increment = the_pfCell.transform.localScale.x;
 
@@ -123,6 +110,7 @@ public class Clicker : MonoBehaviour
         m_ckCurrentCell = gameObject.AddComponent<ChuckIntSyncer>();
         m_ckCurrentCell.SyncInt(GetComponent<ChuckSubInstance>(), "cur_COL");
 
+        // add button listeners
         RESET.onClick.AddListener(resetScreen);
         DRONE.onClick.AddListener(toggleDrone);
         SAVE.onClick.AddListener(saveSequence);
@@ -132,10 +120,6 @@ public class Clicker : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-
-        // update the playhead using info from ChucK's playheadPos
-        // prev_Cell = grid[m_ckCurrentCell.GetCurrentValue(), 12].GetComponent<Renderer>().material.color;
-
         // edit
         if(Input.GetMouseButtonDown(0))
         {
@@ -169,41 +153,20 @@ public class Clicker : MonoBehaviour
             GetComponent<ChuckSubInstance>().SetInt("edit_COL", edit_COL);
             GetComponent<ChuckSubInstance>().SetFloat("droneGain", droneGain);
             GetComponent<ChuckSubInstance>().SetInt("reset", reset);
+            GetComponent<ChuckSubInstance>().SetInt("save", saved);
             GetComponent<ChuckSubInstance>().SetInt("edit_ROW", edit_ROW);
-            GetComponent<ChuckSubInstance>().SetInt("version", version);
+            // GetComponent<ChuckSubInstance>().SetInt("version", version);
             GetComponent<ChuckSubInstance>().BroadcastEvent("editHappened");
         }
 
         // move playhead
         grid[m_ckCurrentCell.GetCurrentValue(), 12].GetComponent<Renderer>().material.color = Color.white;
-        
-        // make previous cell black
-        // if(m_ckCurrentCell.GetCurrentValue() == 0) {
-        //     grid[79, 12].GetComponent<Renderer>().material.color = Color.black;
-        // } else {
-        //     grid[m_ckCurrentCell.GetCurrentValue() - 1, 12].GetComponent<Renderer>().material.color = Color.black;
-        // }
 
         for(int i = 0; i < NUM_COLS; i++) {
             if(i != m_ckCurrentCell.GetCurrentValue()) {
                 grid[i, 12].GetComponent<Renderer>().material.color = Color.black;
             } 
         }
-
-        // if(m_ckCurrentCell.GetCurrentValue() == 0) {
-        //     if(prev_Cell == Color.black) {
-        //         grid[79, 12].GetComponent<Renderer>().material.color = Color.black;
-        //     } else if(prev_Cell == Color.yellow) {
-        //         grid[79, 12].GetComponent<Renderer>().material.color = Color.yellow;
-        //     }
-        // } else {
-        //     if(prev_Cell == Color.black) {
-        //         grid[m_ckCurrentCell.GetCurrentValue() - 1, 12].GetComponent<Renderer>().material.color = Color.black;
-        //     } else if(prev_Cell == Color.yellow) {
-        //         grid[m_ckCurrentCell.GetCurrentValue() - 1, 12].GetComponent<Renderer>().material.color = Color.yellow;
-        //     }
-        // }
-
     }
 
     void resetScreen() {
@@ -212,7 +175,7 @@ public class Clicker : MonoBehaviour
         reset = 1;
         version = 0;
         GetComponent<ChuckSubInstance>().SetInt("reset", reset);
-        GetComponent<ChuckSubInstance>().SetInt("version", version);
+        // GetComponent<ChuckSubInstance>().SetInt("version", version);
         GetComponent<ChuckSubInstance>().BroadcastEvent("editHappened");
 
         // reset all cells to black
@@ -227,47 +190,49 @@ public class Clicker : MonoBehaviour
     }
 
     void toggleDrone() {
-        droneGain = droneGain == 0f ? droneGain = 0.2f : droneGain = 0f;
+        droneGain = droneGain == 0f ? 0.2f : 0f;
 
         GetComponent<ChuckSubInstance>().SetFloat("droneGain", droneGain);
         GetComponent<ChuckSubInstance>().BroadcastEvent("editHappened");
     }
 
     void saveSequence() {
-        Debug.Log("Save");
-        Debug.Log(SAVE1[0,0]);
-        //SAVE1 = grid;
+        saved = 1;
+        SAVED = 1;
+        GetComponent<ChuckSubInstance>().SetInt("save", saved);
+        GetComponent<ChuckSubInstance>().BroadcastEvent("editHappened");
+
         for(int col = 0; col < NUM_COLS; col++) {
             for(int row = 0; row < NUM_ROWS; row++) {
                 SAVE1[col, row] = grid[col, row].GetComponent<Renderer>().material.color == Color.yellow ? 1 : 0;
             }
         }
-        Debug.Log(SAVE1[0,0]);
-        saved = 1;
-        GetComponent<ChuckSubInstance>().SetInt("saved", saved);
+
+        saved = 0;
+        GetComponent<ChuckSubInstance>().SetInt("save", saved);
         GetComponent<ChuckSubInstance>().BroadcastEvent("editHappened");
         resetScreen();
     }
 
     void loadSequence() {
-        Debug.Log("Load");
-        switch(saved) {
-            case 1:
-                resetScreen();
-                version = 1;
-                Debug.Log("True");
-                for(int col = 0; col < NUM_COLS; col++) {
-                    for(int row = 0; row < NUM_ROWS; row++) {
-                        grid[col, row].GetComponent<Renderer>().material.color = SAVE1[col, row] == 1 ? Color.yellow : Color.black;
+        if(SAVED == 1) {
+            resetScreen();
+            version = 1;
+            // GetComponent<ChuckSubInstance>().SetInt("version", version);
+            GetComponent<ChuckSubInstance>().BroadcastEvent("editHappened");
+
+            for(int col = 0; col < NUM_COLS; col++) {
+                for(int row = 0; row < NUM_ROWS; row++) {
+                    if(SAVE1[col, row] == 1) {
+                        grid[col, row].GetComponent<Renderer>().material.color = Color.yellow;
+                    } else {
+                        grid[col, row].GetComponent<Renderer>().material.color = Color.black;
                     }
                 }
-                GetComponent<ChuckSubInstance>().SetInt("version", version);
-                GetComponent<ChuckSubInstance>().BroadcastEvent("editHappened");
-                break;
-            
-            default:
-                EditorUtility.DisplayDialog("You have no saved sequences.", ":(", "OK, I will go make some!");
-                break;
+            }
+
+        } else {
+            EditorUtility.DisplayDialog("WARNING:", "You have no saved sequences :(", "OK, I will go make some!");
         }
     }
 }
