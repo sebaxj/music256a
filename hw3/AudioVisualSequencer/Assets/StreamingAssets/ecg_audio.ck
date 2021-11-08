@@ -18,16 +18,19 @@ global int edit_COL;
 global int edit_ROW;
 0 => global int reset;
 0 => global float droneGain;
+0 => global int version;
+0 => global int save;
 global Event editHappened;
 
 /////////////////////////////////////////////////////////////////////////////////////////
 
 // set up matrix to model Unity grid matrix
 int grid[NUM_COLS][NUM_ROWS];
+int saved[NUM_COLS][NUM_ROWS];
 
 // patch
 SinOsc s => ADSR e => dac;
-SinOsc drone => dac;
+TriOsc drone => dac;
 BASE_NOTE => drone.freq;
 droneGain => drone.gain;
 
@@ -61,13 +64,13 @@ while(true) {
       // play sound corresponding to frequency
         // BASE_NOTE + filled row
         
-    for(0 => int cur_ROW; cur_ROW < NUM_ROWS; cur_ROW++) {
-        if(grid[cur_COL][cur_ROW] == 1) {
-            spork ~ playSound(cur_ROW);
+        for(0 => int cur_ROW; cur_ROW < NUM_ROWS; cur_ROW++) {
+            if(grid[cur_COL][cur_ROW] == 1) {
+                spork ~ playSound(cur_ROW);
+            }
+            // advance time by duration of one beat 
+            BEAT => now;
         }
-        // advance time by duration of one beat 
-        BEAT => now;
-    }
              
     // increment to next column           
     cur_COL++;
@@ -124,6 +127,22 @@ fun void listenForEdit() {
                     0 => grid[cur_COL][cur_ROW];
                 }
             }
+        }
+        
+        if(save == 1) {
+            for(0 => int x; x < NUM_COLS; x++) {
+                for(0 => int y; y < NUM_ROWS; y++) {
+                    grid[x][y] => saved[x][y];
+                }
+            }   
+        }
+        
+        if(version == 1) {
+            for(0 => int x; x < NUM_COLS; x++) {
+                for(0 => int y; y < NUM_ROWS; y++) {
+                    saved[x][y] => grid[x][y];
+                }
+            }   
         }
         
         // set droneGain from Unity (either 0 for off, of 0.2 for on)

@@ -2,15 +2,16 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEditor;
 
 // TODO
 // 1. Refactor code to be on a matrix grid (DONE)
 // 2. Fix ChucK code to properly play sequenced notes off the matrix grid. (DONE)
 // 3. Keep track of state of each cell with more variables to change speed, sound etc. (IF TIME)
-// 4. Fix glitches with cell colors (IF TIME)
+// 4. Fix glitches with cell colors (DONE)
 // 5. Add functionality with other vitals to add other instrument
     // i. RESET button (DONE)
-    // ii. LOAD button
+    // ii. LOAD/SAVE button
     // iii. DRONE button (DONE)
 // 6. Expand size of everything to have more cells (better resolution, longer sequence) (DONE)
 // 7. Fix colors with lights (yellow more yellow, black more black, white more white) (IF TIME)
@@ -23,8 +24,9 @@ public class Clicker : MonoBehaviour
 
     // button references
     public Button RESET;
-    //public Button LOAD
+    public Button SAVE;
     public Button DRONE;
+    public Button LOAD;
 
     // prefab reference
     public GameObject the_pfCell;
@@ -35,6 +37,12 @@ public class Clicker : MonoBehaviour
 
     // array of game objects
     public GameObject[,] grid = new GameObject[NUM_COLS, NUM_ROWS];
+
+    // array of game objects to store saved sequence
+    public int[,] SAVE1 = new int[NUM_COLS, NUM_ROWS];
+    private int saved = 0; // to keep track of save-state
+
+
 
     // --------- AUDIO -------------
     // int sync
@@ -48,6 +56,9 @@ public class Clicker : MonoBehaviour
     private int edit_ROW;
     private int reset = 0;
     private float droneGain = 0f;
+
+    // int to keep track of which version of sequence we are playing
+    private int version = 0;
 
     // Color variable to keep track of color of playhead before it is changed to white
     // in case it is yellow (yellow must persist as playhead moves through it)
@@ -114,6 +125,8 @@ public class Clicker : MonoBehaviour
 
         RESET.onClick.AddListener(resetScreen);
         DRONE.onClick.AddListener(toggleDrone);
+        SAVE.onClick.AddListener(saveSequence);
+        LOAD.onClick.AddListener(loadSequence);
     }
 
     // Update is called once per frame
@@ -157,6 +170,7 @@ public class Clicker : MonoBehaviour
             GetComponent<ChuckSubInstance>().SetFloat("droneGain", droneGain);
             GetComponent<ChuckSubInstance>().SetInt("reset", reset);
             GetComponent<ChuckSubInstance>().SetInt("edit_ROW", edit_ROW);
+            GetComponent<ChuckSubInstance>().SetInt("version", version);
             GetComponent<ChuckSubInstance>().BroadcastEvent("editHappened");
         }
 
@@ -164,10 +178,16 @@ public class Clicker : MonoBehaviour
         grid[m_ckCurrentCell.GetCurrentValue(), 12].GetComponent<Renderer>().material.color = Color.white;
         
         // make previous cell black
-        if(m_ckCurrentCell.GetCurrentValue() == 0) {
-            grid[79, 12].GetComponent<Renderer>().material.color = Color.black;
-        } else {
-            grid[m_ckCurrentCell.GetCurrentValue() - 1, 12].GetComponent<Renderer>().material.color = Color.black;
+        // if(m_ckCurrentCell.GetCurrentValue() == 0) {
+        //     grid[79, 12].GetComponent<Renderer>().material.color = Color.black;
+        // } else {
+        //     grid[m_ckCurrentCell.GetCurrentValue() - 1, 12].GetComponent<Renderer>().material.color = Color.black;
+        // }
+
+        for(int i = 0; i < NUM_COLS; i++) {
+            if(i != m_ckCurrentCell.GetCurrentValue()) {
+                grid[i, 12].GetComponent<Renderer>().material.color = Color.black;
+            } 
         }
 
         // if(m_ckCurrentCell.GetCurrentValue() == 0) {
@@ -190,7 +210,9 @@ public class Clicker : MonoBehaviour
 
         // tell ChucK to reset sound grid
         reset = 1;
+        version = 0;
         GetComponent<ChuckSubInstance>().SetInt("reset", reset);
+        GetComponent<ChuckSubInstance>().SetInt("version", version);
         GetComponent<ChuckSubInstance>().BroadcastEvent("editHappened");
 
         // reset all cells to black
@@ -209,5 +231,43 @@ public class Clicker : MonoBehaviour
 
         GetComponent<ChuckSubInstance>().SetFloat("droneGain", droneGain);
         GetComponent<ChuckSubInstance>().BroadcastEvent("editHappened");
+    }
+
+    void saveSequence() {
+        Debug.Log("Save");
+        Debug.Log(SAVE1[0,0]);
+        //SAVE1 = grid;
+        for(int col = 0; col < NUM_COLS; col++) {
+            for(int row = 0; row < NUM_ROWS; row++) {
+                SAVE1[col, row] = grid[col, row].GetComponent<Renderer>().material.color == Color.yellow ? 1 : 0;
+            }
+        }
+        Debug.Log(SAVE1[0,0]);
+        saved = 1;
+        GetComponent<ChuckSubInstance>().SetInt("saved", saved);
+        GetComponent<ChuckSubInstance>().BroadcastEvent("editHappened");
+        resetScreen();
+    }
+
+    void loadSequence() {
+        Debug.Log("Load");
+        switch(saved) {
+            case 1:
+                resetScreen();
+                version = 1;
+                Debug.Log("True");
+                for(int col = 0; col < NUM_COLS; col++) {
+                    for(int row = 0; row < NUM_ROWS; row++) {
+                        grid[col, row].GetComponent<Renderer>().material.color = SAVE1[col, row] == 1 ? Color.yellow : Color.black;
+                    }
+                }
+                GetComponent<ChuckSubInstance>().SetInt("version", version);
+                GetComponent<ChuckSubInstance>().BroadcastEvent("editHappened");
+                break;
+            
+            default:
+                EditorUtility.DisplayDialog("You have no saved sequences.", ":(", "OK, I will go make some!");
+                break;
+        }
     }
 }
