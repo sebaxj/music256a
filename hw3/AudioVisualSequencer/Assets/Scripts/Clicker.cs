@@ -14,8 +14,8 @@ using UnityEngine.UI;
     // iii. DRONE button (DONE)
 // 6. Expand size of everything to have more cells (better resolution, longer sequence) (DONE)
 // 7. Fix colors with lights (yellow more yellow, black more black, white more white) (IF TIME)
-// 8. Refactor code
-// 9. Make it look more "retro"
+// 8. Refactor code (IF TIME)
+// 9. Make it look more "retro" (IF TIME)
 
 public class Clicker : MonoBehaviour
 {
