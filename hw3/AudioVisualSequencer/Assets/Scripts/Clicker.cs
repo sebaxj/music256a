@@ -3,22 +3,19 @@ using System.Collections.Generic;
 using UnityEngine;
 
 // TODO
-// 1. Refactor code to be on a matrix grid  
-// 2. Fix ChucK code to properly play sequenced notes off the matrix grid.
-// 3. Keep track of state of each cell with more variables to change speed, sound etc.
+// 1. Refactor code to be on a matrix grid (DONE)
+// 2. Fix ChucK code to properly play sequenced notes off the matrix grid. (DONE)
+// 3. Keep track of state of each cell with more variables to change speed, sound etc. (IF TIME)
 // 4. Fix glitches with cell colors
 // 5. Add functionality with other vitals to add other instrument
-// 6. Expand size of everything to have more cells (better resolution, longer sequence)
-// 7. Fix click ability to use a "wand" technique to be able to draw
-// 9. Fix colors with lights (yellow more yellow, black more black, white more white)
-// 10. Refactor code
-// 11. Make it look more "retro"
+// 6. Expand size of everything to have more cells (better resolution, longer sequence) (DONE)
+// 7. Fix colors with lights (yellow more yellow, black more black, white more white) (IF TIME)
+// 8. Refactor code
+// 9. Make it look more "retro"
 
 public class Clicker : MonoBehaviour
 {
-    // Initialize Vars
-    // Store state of square
-    public bool clicked = false;
+    // Initialize Vars //
 
     // prefab reference
     public GameObject the_pfCell;
@@ -39,6 +36,10 @@ public class Clicker : MonoBehaviour
     // row syn
     private int edit_COL;
     private int edit_ROW;
+
+    // Color variable to keep track of color of playhead before it is changed to white
+    // in case it is yellow (yellow must persist as playhead moves through it)
+    Color prev_Cell;
 
     // Start is called before the first frame update
     void Start()
@@ -102,34 +103,47 @@ public class Clicker : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        // update the playhead using info from ChucK's playheadPos
+        // prev_Cell = grid[m_ckCurrentCell.GetCurrentValue(), 12].GetComponent<Renderer>().material.color;
+
         // edit
         if(Input.GetMouseButtonDown(0))
         {
-            if(!clicked) { // if it is black (hasn't been clicked -> black)
-                Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-                RaycastHit hit;
-                if (Physics.Raycast(ray, out hit)) {
+            RaycastHit hit;
+            Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+
+            // change color of selected cell
+            if(Physics.Raycast(ray, out hit)) {
+                Color color = hit.collider.GetComponent<Renderer>().material.color;
+                if(color == Color.black || color == Color.white) {
                     hit.collider.GetComponent<Renderer>().material.color = Color.yellow;
-                }
-                clicked = true;
-            } else { // if it is yellow (has been clicked -> yellow)
-                Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-                RaycastHit hit;
-                if (Physics.Raycast(ray, out hit)) {
+                } else if(color == Color.yellow){
                     hit.collider.GetComponent<Renderer>().material.color = Color.black;
                 }
-                clicked = false;
             }
 
-            // cycle through grid array until cube with name matching name of hit.collider
-            // set edit_COL and edit_ROW to equal to hit.collider quad
-            
-            // send edit
+            // determine coordinate of selected cell
+            for(int col = 0; col < NUM_COLS; col++) {
+                for(int row = 0; row < NUM_ROWS; row++) {
+                    if(grid[col, row].name == hit.collider.name) {
+                        edit_COL = col;
+                        edit_ROW = row;
+                        goto LoopEnd;
+                    }
+                }
+            }
+
+            LoopEnd:
+
+            // send edit to ChucK
             GetComponent<ChuckSubInstance>().SetInt("edit_COL", edit_COL);
             GetComponent<ChuckSubInstance>().SetInt("edit_ROW", edit_ROW);
             GetComponent<ChuckSubInstance>().BroadcastEvent("editHappened");
         }
 
+        // move playhead
+        grid[m_ckCurrentCell.GetCurrentValue(), 12].GetComponent<Renderer>().material.color = Color.white;
+        
         // make previous cell black
         if(m_ckCurrentCell.GetCurrentValue() == 0) {
             grid[79, 12].GetComponent<Renderer>().material.color = Color.black;
@@ -137,9 +151,19 @@ public class Clicker : MonoBehaviour
             grid[m_ckCurrentCell.GetCurrentValue() - 1, 12].GetComponent<Renderer>().material.color = Color.black;
         }
 
-        // move playhead
-        // update the playhead using info from ChucK's playheadPos
-        grid[m_ckCurrentCell.GetCurrentValue(), 12].GetComponent<Renderer>().material.color = Color.white;
+        // if(m_ckCurrentCell.GetCurrentValue() == 0) {
+        //     if(prev_Cell == Color.black) {
+        //         grid[79, 12].GetComponent<Renderer>().material.color = Color.black;
+        //     } else if(prev_Cell == Color.yellow) {
+        //         grid[79, 12].GetComponent<Renderer>().material.color = Color.yellow;
+        //     }
+        // } else {
+        //     if(prev_Cell == Color.black) {
+        //         grid[m_ckCurrentCell.GetCurrentValue() - 1, 12].GetComponent<Renderer>().material.color = Color.black;
+        //     } else if(prev_Cell == Color.yellow) {
+        //         grid[m_ckCurrentCell.GetCurrentValue() - 1, 12].GetComponent<Renderer>().material.color = Color.yellow;
+        //     }
+        // }
 
     }
 }
