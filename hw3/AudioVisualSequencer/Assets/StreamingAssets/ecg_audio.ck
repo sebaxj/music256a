@@ -17,6 +17,7 @@ Std.mtof(60) => float BASE_NOTE;
 global int edit_COL;
 global int edit_ROW;
 0 => global int reset;
+0 => global float droneGain;
 global Event editHappened;
 
 /////////////////////////////////////////////////////////////////////////////////////////
@@ -26,6 +27,9 @@ int grid[NUM_COLS][NUM_ROWS];
 
 // patch
 SinOsc s => ADSR e => dac;
+SinOsc drone => dac;
+BASE_NOTE => drone.freq;
+droneGain => drone.gain;
 
 // set A, D, S, and R
 e.set( 10::ms, 8::ms, .5, 500::ms );
@@ -35,6 +39,7 @@ e.set( 10::ms, 8::ms, .5, 500::ms );
         
 // spork edit listener
 spork ~ listenForEdit();
+spork ~ listenForDrone();
  
 1 => int first;
 -1 => int sec;
@@ -50,11 +55,12 @@ spork ~ listenForEdit();
 
 // sequencer loop
 while(true) {
+    
     // find which col we are in
     // for each filled cell in col:
       // play sound corresponding to frequency
         // BASE_NOTE + filled row
-    // <<< cur_COL >>>;
+        
     for(0 => int cur_ROW; cur_ROW < NUM_ROWS; cur_ROW++) {
         if(grid[cur_COL][cur_ROW] == 1) {
             spork ~ playSound(cur_ROW);
@@ -92,6 +98,13 @@ fun void playSound(int frequency) {
     0 => s.gain;
 }
 
+// function to play drone, controlled by toggling gain off or on
+fun void listenForDrone() {
+    while(true) {
+        10::ms => now;
+    }
+}
+
 // to update the sequence               
 fun void listenForEdit() {
     while( true ) {
@@ -113,5 +126,7 @@ fun void listenForEdit() {
             }
         }
         
+        // set droneGain from Unity (either 0 for off, of 0.2 for on)
+        droneGain => drone.gain;
     }
 }

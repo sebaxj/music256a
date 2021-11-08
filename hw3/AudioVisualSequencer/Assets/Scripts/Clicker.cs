@@ -11,7 +11,7 @@ using UnityEngine.UI;
 // 5. Add functionality with other vitals to add other instrument
     // i. RESET button (DONE)
     // ii. LOAD button
-    // iii. DRONE button (flatline?)
+    // iii. DRONE button (DONE)
 // 6. Expand size of everything to have more cells (better resolution, longer sequence) (DONE)
 // 7. Fix colors with lights (yellow more yellow, black more black, white more white) (IF TIME)
 // 8. Refactor code
@@ -24,7 +24,7 @@ public class Clicker : MonoBehaviour
     // button references
     public Button RESET;
     //public Button LOAD
-    //public Button DRONE;
+    public Button DRONE;
 
     // prefab reference
     public GameObject the_pfCell;
@@ -47,7 +47,7 @@ public class Clicker : MonoBehaviour
     private int edit_COL;
     private int edit_ROW;
     private int reset = 0;
-    //private int drone = 0;
+    private float droneGain = 0f;
 
     // Color variable to keep track of color of playhead before it is changed to white
     // in case it is yellow (yellow must persist as playhead moves through it)
@@ -113,7 +113,7 @@ public class Clicker : MonoBehaviour
         m_ckCurrentCell.SyncInt(GetComponent<ChuckSubInstance>(), "cur_COL");
 
         RESET.onClick.AddListener(resetScreen);
-        //DRONE.onClick.AddListener(toggleDrone);
+        DRONE.onClick.AddListener(toggleDrone);
     }
 
     // Update is called once per frame
@@ -154,6 +154,7 @@ public class Clicker : MonoBehaviour
 
             // send edit to ChucK
             GetComponent<ChuckSubInstance>().SetInt("edit_COL", edit_COL);
+            GetComponent<ChuckSubInstance>().SetFloat("droneGain", droneGain);
             GetComponent<ChuckSubInstance>().SetInt("reset", reset);
             GetComponent<ChuckSubInstance>().SetInt("edit_ROW", edit_ROW);
             GetComponent<ChuckSubInstance>().BroadcastEvent("editHappened");
@@ -204,9 +205,9 @@ public class Clicker : MonoBehaviour
     }
 
     void toggleDrone() {
-        drone = drone < 1 ? drone = 1 : drone = 0;
+        droneGain = droneGain == 0f ? droneGain = 0.2f : droneGain = 0f;
 
-        GetComponent<ChuckSubInstance>().SetInt("drone", drone);
+        GetComponent<ChuckSubInstance>().SetFloat("droneGain", droneGain);
         GetComponent<ChuckSubInstance>().BroadcastEvent("editHappened");
     }
 }
