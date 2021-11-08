@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
-using UnityEditor;
+// using UnityEditor;
 
 public class Clicker : MonoBehaviour
 {
@@ -232,7 +232,7 @@ public class Clicker : MonoBehaviour
             }
 
         } else {
-            EditorUtility.DisplayDialog("WARNING:", "You have no saved sequences :(", "OK, I will go make some!");
+            // EditorUtility.DisplayDialog("WARNING:", "You have no saved sequences :(", "OK, I will go make some!");
         }
     }
 }
