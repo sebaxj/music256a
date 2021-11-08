@@ -16,6 +16,7 @@ Std.mtof(60) => float BASE_NOTE;
 // global (incoming) data from Unity
 global int edit_COL;
 global int edit_ROW;
+0 => global int reset;
 global Event editHappened;
 
 /////////////////////////////////////////////////////////////////////////////////////////
@@ -97,11 +98,20 @@ fun void listenForEdit() {
         // wait for event
         editHappened => now;
         
-        // update grid with edit
-        if(grid[edit_COL][edit_ROW] == 0) {
-            1 => grid[edit_COL][edit_ROW];     
-        } else {
-            0 => grid[edit_COL][edit_ROW]; 
+        if(reset == 0) {
+            // update grid with edit
+            if(grid[edit_COL][edit_ROW] == 0) {
+                1 => grid[edit_COL][edit_ROW];     
+            } else {
+                0 => grid[edit_COL][edit_ROW]; 
+            }
+        } else if(reset == 1) {
+            for(0 => int cur_COL; cur_COL < NUM_COLS; cur_COL++) {
+                for(0 => int cur_ROW; cur_ROW < NUM_ROWS; cur_ROW++) {
+                    0 => grid[cur_COL][cur_ROW];
+                }
+            }
         }
+        
     }
 }

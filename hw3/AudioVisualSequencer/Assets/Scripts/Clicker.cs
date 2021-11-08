@@ -1,13 +1,17 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 // TODO
 // 1. Refactor code to be on a matrix grid (DONE)
 // 2. Fix ChucK code to properly play sequenced notes off the matrix grid. (DONE)
 // 3. Keep track of state of each cell with more variables to change speed, sound etc. (IF TIME)
-// 4. Fix glitches with cell colors
+// 4. Fix glitches with cell colors (IF TIME)
 // 5. Add functionality with other vitals to add other instrument
+    // i. RESET button (DONE)
+    // ii. LOAD button
+    // iii. DRONE button (flatline?)
 // 6. Expand size of everything to have more cells (better resolution, longer sequence) (DONE)
 // 7. Fix colors with lights (yellow more yellow, black more black, white more white) (IF TIME)
 // 8. Refactor code
@@ -16,6 +20,11 @@ using UnityEngine;
 public class Clicker : MonoBehaviour
 {
     // Initialize Vars //
+
+    // button references
+    public Button RESET;
+    //public Button LOAD
+    //public Button DRONE;
 
     // prefab reference
     public GameObject the_pfCell;
@@ -34,8 +43,11 @@ public class Clicker : MonoBehaviour
     // --------- SHARED ------------
     // col sync
     // row syn
+    // reset indicator
     private int edit_COL;
     private int edit_ROW;
+    private int reset = 0;
+    //private int drone = 0;
 
     // Color variable to keep track of color of playhead before it is changed to white
     // in case it is yellow (yellow must persist as playhead moves through it)
@@ -44,6 +56,7 @@ public class Clicker : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {    
+
         // x is axis which controls height of bottom to top (0 is origin)
         // z axis controls the depth of objects relative to the camera (pos is more backwards relative to the camera)
         // y axis controls width of objects from left to right
@@ -98,11 +111,15 @@ public class Clicker : MonoBehaviour
         // add the int sync
         m_ckCurrentCell = gameObject.AddComponent<ChuckIntSyncer>();
         m_ckCurrentCell.SyncInt(GetComponent<ChuckSubInstance>(), "cur_COL");
+
+        RESET.onClick.AddListener(resetScreen);
+        //DRONE.onClick.AddListener(toggleDrone);
     }
 
     // Update is called once per frame
     void Update()
     {
+
         // update the playhead using info from ChucK's playheadPos
         // prev_Cell = grid[m_ckCurrentCell.GetCurrentValue(), 12].GetComponent<Renderer>().material.color;
 
@@ -137,6 +154,7 @@ public class Clicker : MonoBehaviour
 
             // send edit to ChucK
             GetComponent<ChuckSubInstance>().SetInt("edit_COL", edit_COL);
+            GetComponent<ChuckSubInstance>().SetInt("reset", reset);
             GetComponent<ChuckSubInstance>().SetInt("edit_ROW", edit_ROW);
             GetComponent<ChuckSubInstance>().BroadcastEvent("editHappened");
         }
@@ -165,5 +183,30 @@ public class Clicker : MonoBehaviour
         //     }
         // }
 
+    }
+
+    void resetScreen() {
+
+        // tell ChucK to reset sound grid
+        reset = 1;
+        GetComponent<ChuckSubInstance>().SetInt("reset", reset);
+        GetComponent<ChuckSubInstance>().BroadcastEvent("editHappened");
+
+        // reset all cells to black
+        for(int col = 0; col < NUM_COLS; col++) {
+            for(int row = 0; row < NUM_ROWS; row++) {
+                grid[col, row].GetComponent<Renderer>().material.color = Color.black;
+            }
+        }
+
+        // set reset to 0
+        reset = 0;
+    }
+
+    void toggleDrone() {
+        drone = drone < 1 ? drone = 1 : drone = 0;
+
+        GetComponent<ChuckSubInstance>().SetInt("drone", drone);
+        GetComponent<ChuckSubInstance>().BroadcastEvent("editHappened");
     }
 }
