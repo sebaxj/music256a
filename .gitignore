@@ -67,5 +67,5 @@ final/Operation/Assets/*
 !/final/Operation/Assets/Scripts
 !/final/Operation/Assets/Scripts.meta
 final/Operation/Assets/HuMan/Assets/Textures/*
-!/final/Operation/Assets/HuMan/Assets/Textures/HuManDefuse.png
+!/final/Operation/Assets/HuMan/Assets/Textures/*.png
 
