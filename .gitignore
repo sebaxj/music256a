@@ -47,8 +47,6 @@ hw3/AudioVisualSequencer/Assets/Prefabs/*
 hw3/AudioVisualSequencer/Assets/Prefabs.meta
 hw3/AudioVisualSequencer/Assets/Scenes/*
 hw3/AudioVisualSequencer/Assets/Scenes.meta
-# hw3/AudioVisualSequencer/Assets/StreamingAssets/*
-# hw3/AudioVisualSequencer/Assets/StreamingAssets.meta
 hw3/AudioVisualSequencer/Assets/Settings/*
 hw3/AudioVisualSequencer/Assets/Settings.meta
 hw3/AudioVisualSequencer/Assets/Presets/*
@@ -57,3 +55,15 @@ hw3/AudioVisualSequencer/Builds/*
 hw3/AudioVisualSequencer/Temp/*
 hw3/assets/milestone_2_example.mov
 hw3/assets/final/*
+
+
+final/Operation/Library/*
+final/Operation/Temp/*
+final/Operation/Logs/*
+final/Operation/Packages/*
+final/Operation/ProjectSettings/*
+final/Operation/UserSettings/*
+final/Operation/Assets/*
+!/final/Operation/Assets/Scripts
+!/final/Operation/Assets/Scripts.meta
+
