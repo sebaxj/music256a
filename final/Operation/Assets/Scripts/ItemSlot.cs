@@ -23,6 +23,12 @@ public class ItemSlot : MonoBehaviour, IDropHandler {
                 case "Brain_Slot":
                     // let Chunity know that brain has be added
                     Debug.Log("Brain");
+                    BRAIN = 1;
+
+                    // send edit to ChucK
+                    GetComponent<ChuckSubInstance>().SetInt("BRAIN", BRAIN);
+                    GetComponent<ChuckSubInstance>().BroadcastEvent("editHappened"); 
+
                     break;
                 
                 case "Heart_Slot":
@@ -39,18 +45,51 @@ public class ItemSlot : MonoBehaviour, IDropHandler {
                 case "Lungs_Slot":
                     // let Chunity know that lungs have been added
                     Debug.Log("Lungs");
+                    LUNGS = 1;
+
+                    // send edit to ChucK
+                    GetComponent<ChuckSubInstance>().SetInt("LUNGS", LUNGS);
+                    GetComponent<ChuckSubInstance>().BroadcastEvent("editHappened"); 
                     break;
                 
                 default:
                     // let Chunity know that eventData.pointerDrag.name should be REMOVED from music (it is in trash)
                     Debug.Log(eventData.pointerDrag.name);
 
+                    switch(eventData.pointerDrag.name) {
+                        case "HEART":
 
-                    HEART = 0;
+                            HEART = 0;
 
-                    // send edit to ChucK
-                    GetComponent<ChuckSubInstance>().SetInt("HEART", HEART);
-                    GetComponent<ChuckSubInstance>().BroadcastEvent("editHappened"); 
+                            // send edit to ChucK
+                            GetComponent<ChuckSubInstance>().SetInt("HEART", HEART);
+                            GetComponent<ChuckSubInstance>().BroadcastEvent("editHappened"); 
+
+                            break;
+
+                        case "LUNGS":
+
+                            LUNGS = 0;
+
+                            // send edit to ChucK
+                            GetComponent<ChuckSubInstance>().SetInt("LUNGS", LUNGS);
+                            GetComponent<ChuckSubInstance>().BroadcastEvent("editHappened"); 
+
+                            break;
+
+                        case "BRAIN":
+
+                            BRAIN = 0;
+
+                            // send edit to ChucK
+                            GetComponent<ChuckSubInstance>().SetInt("BRAIN", BRAIN);
+                            GetComponent<ChuckSubInstance>().BroadcastEvent("editHappened"); 
+                            break; 
+
+                        default:
+                            break;
+                    }
+
                     break;
             }
         }

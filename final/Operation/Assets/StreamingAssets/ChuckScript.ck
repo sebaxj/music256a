@@ -13,18 +13,20 @@ spork ~ listenForEdit();
 
 // infinite time-loop
 while( true ) {
-    10::ms => now;
+    500::ms => now;
 }
 
 // function to play a sound
 fun void playSound() {
     // patch
-    SinOsc s => ADSR e => dac;
+    SinOsc s => ADSR e => NRev rev => dac;
     
-    e.set( 10::ms, 8::ms, .5, 500::ms );
+    e.set( 200::ms, 80::ms, .5, 500::ms );
     
     // set gain
     .5 => s.gain;
+    
+    .01 => rev.mix;
     
     // key on: begin ATTACK
     // (note: ATTACK automatically transitions to DECAY;
@@ -56,17 +58,25 @@ fun void listenForEdit() {
             
             spork ~ playSound();
             
-            1::second => now;
+            2::second => now;
             
         }
         
         while(LUNGS == 1) {
             // add lungs sound
             
+            spork ~ playSound();
+            
+            2::second => now;
+            
         }
         
         while(BRAIN == 1) {
             // add brain sound
+            
+            spork ~ playSound();
+            
+            2::second => now;
             
         }
     }
