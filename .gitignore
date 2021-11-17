@@ -57,9 +57,11 @@ hw3/assets/milestone_2_example.mov
 hw3/assets/final/*
 
 
+final/assets/milestone1.mov
 final/Operation/Library/*
 final/Operation/Temp/*
 final/Operation/Logs/*
+final/Operation/Builds/*
 final/Operation/Packages/*
 final/Operation/ProjectSettings/*
 final/Operation/UserSettings/*
