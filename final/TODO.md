@@ -2,23 +2,40 @@
 
 TODO:
 
-- Integrate ChucK:  
-   i. Install Chunity  
-   ii. Add global varaibles to communicate from Unity to ChucK  
-   iii. Code a simple base track (pentatonic scale over a 4 bar sequence)  
-   iv. Add density and probability arrays  
-   v. Add instrument classes for hear, lungs, and brain which are triggered by adding the respective organ to the body, and removed by draggin the respective organ to the trash (resets the organ to the table)
-- Refactor project:
-  - remove all extra files
-  - sort files into folders
-  - refactor scene hierarchy
-- Add all organs and exchange sprites for 3D assets
-  - Add item slots for all organs
-  - Get drag and drop to work with organs and trash
+1. ChucK Integration:
+
+   - Code a simple base track (pentatonic scale over a 4 bar sequence)
+   - Add density and probability feature
+   - Integrate smooth transitions between organ addition and subtraction
+
+2. Add all organs and exchange sprites for 3D assets
+
+   - Add item slots for all organs
+   - Get drag and drop to work with organs and trash
+
+3. Add vitals monitor
+   - Heart Rate
+   - Brain Activity (EEG Trace)
+   - Blood Pressure (Distortion?)
+   - IF: vitals kill patient -> THEN: initiate kill function in ChucK and Unity
+4. Add Main Menu with two modes:
+   - Start with empty body
+   - Start with full body
+5. Refactor project:
+   - remove all extra files
+   - sort files into folders
+   - refactor scene hierarchy
+   - refine .gitignore
+6. Package application and files for download, publish final website
+7. Refactor main index.html to present better UI to access all buttons
 
 DONE:
 
-- Watch drag-and-drop tutorial and implement the script to move organs between:  
-   i. table  
-   ii. body  
-   iii. trash
+- Watch drag-and-drop tutorial and implement the script to move organs between:
+  - table
+  - body
+  - trash
+- Integrate ChucK:
+  - Install Chunity
+  - Add global varaibles to communicate from Unity to ChucK
+  - Add instrument classes for hear, lungs, and brain which are triggered by adding the respective organ to the body, and removed by draggin the respective organ to the trash (resets the organ to the table)
