@@ -66,6 +66,8 @@ final/Operation/UserSettings/*
 final/Operation/Assets/*
 !/final/Operation/Assets/Scripts
 !/final/Operation/Assets/Scripts.meta
+!/final/Operation/Assets/StreamingAssets
+!/final/Operation/Assets/StreamingAssets.meta
 final/Operation/Assets/HuMan/Assets/Textures/*
 !/final/Operation/Assets/HuMan/Assets/Textures/*.png
 
