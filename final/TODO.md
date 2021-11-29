@@ -2,24 +2,10 @@
 
 TODO:
 
-1. Add vitals monitor
-   - Heart Rate
-   - Blood Pressure (Distortion?)
-   - Blood Oxygen
-   - Temperature
-   - IF: vitals kill patient -> THEN: initiate kill function in ChucK and Unity
-   - For each `Update()` check for both input slider value and the "health" score of the patient:
-     - organ value system:
-     - 1: Brain
-     - 2: Heart
-     - 3: Lungs
-     - 4: Kidney (x2)
-     - 5: Stomach
-     - 6: Intestine
-2. Add Main Menu with two modes:
+1. Add Main Menu with two modes:
    - Start with empty body
    - Start with full body
-3. Add Epinephrine shots and Nurse's voice
+2. Add Epinephrine shots and Nurse's voice
    - Nurse's voice:
      - Consistent time intervals:
        - "Its a great day to save lives!"
@@ -30,6 +16,9 @@ TODO:
        - "The patient is waking up!"
      - When the vitals are crashing (from full)
        - "Vitals are crashing. Do you want to administer EPI?"
+3. Edit vitals algorithm
+   - Refactor algorithm to be more percise and concise
+   - IF: vitals kill patient -> THEN: initiate kill function in ChucK and Unity
 4. Refactor project:
    - remove all extra files
    - sort files into folders
@@ -58,3 +47,17 @@ DONE:
   - Code a simple base track (pentatonic scale over a 4 bar sequence)
   - Add density and probability feature
   - Integrate smooth transitions between organ addition and subtraction
+
+- Edit vitals monitor
+  - Heart Rate
+  - Blood Pressure (Distortion?)
+  - Blood Oxygen
+  - Temperature
+  - For each `Update()` check for both input slider value and the "health" score of the patient:
+    - organ value system:
+    - 1: Brain
+    - 2: Heart
+    - 3: Lungs
+    - 4: Kidney (x2)
+    - 5: Stomach
+    - 6: Intestine

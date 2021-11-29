@@ -10,6 +10,7 @@
 0 => global int KIDNEY_L;
 0 => global int KIDNEY_R;
 0 => global int INTESTINE;
+0 => global int EPI;
 
 global Event editHappened;
 
@@ -43,24 +44,31 @@ spork ~ listenForEdit();
 
 // drum section
 me.dir() + "Heartbeat.wav" => string filename;
-if(me.args()) me.arg(0) => filename;
 
 // patch
 SndBuf buf => dac;
 
 // zombie section
 me.dir() + "zombie.wav" => string filename2;
-if(me.args()) me.arg(0) => filename;
 
 // patch
 SndBuf buf2 => dac;
 
 // lightning section
 me.dir() + "lightning.wav" => string filename3;
-if(me.args()) me.arg(0) => filename;
 
 // patch
 SndBuf buf3 => dac;
+
+// epi section
+me.dir() + "scream.wav" => string filename4;
+
+SndBuf buf4 => dac;
+
+// nurse section
+me.dir() + "epi.wav" => string filename5;
+
+SndBuf buf5 => dac;
 
 // Global UGen //
 // patch low -> rev -> dax ->
@@ -196,7 +204,7 @@ fun void pentatonic() {
         
         Math.random2(0,1) => int determiner;
         
-        <<< "NOTE:", determiner >>>;
+        //<<< "NOTE:", determiner >>>;
         
         if(determiner == 1) {
         
@@ -232,17 +240,29 @@ fun void pentatonic() {
     }
 }
 
+fun void nurseVoice() {
+    30::second => now;
+    filename5 => buf5.read;
+    0 => buf5.pos;
+    1.0 => buf5.rate;
+    0.1 => buf5.gain;
+    6::second => now;
+}
+
+
+
 fun void heart() {
     while(true) {
         editHappened => now;
-        while(HEART == 1) {
-        // add heart sound
         
-        filename => buf.read;
-        0 => buf.pos;
-        1.0 => buf.rate;
-        0.6 => buf.gain;
-        1::second => now;
+        while(HEART == 1) {
+            // add heart sound
+        
+            filename => buf.read;
+            0 => buf.pos;
+            1.0 => buf.rate;
+            0.6 => buf.gain;
+            1::second => now;
         
         }
     }
@@ -318,7 +338,7 @@ fun void stomach() {
             
             Math.random2(0,2) => int determiner;
             
-            <<< "NOTE:", determiner >>>;
+            //<<< "NOTE:", determiner >>>;
             
             if(determiner == 1) {
                 
@@ -369,7 +389,7 @@ fun void kidney_L() {
             
             Math.random2(0,4) => int determiner;
             
-            <<< "NOTE:", determiner >>>;
+            //<<< "NOTE:", determiner >>>;
             
             if(determiner == 1) {
                 
@@ -420,7 +440,7 @@ fun void kidney_R() {
             
             Math.random2(0,4) => int determiner;
             
-            <<< "NOTE:", determiner >>>;
+            //<<< "NOTE:", determiner >>>;
             
             if(determiner == 1) {
                 
@@ -471,7 +491,7 @@ fun void intestine() {
             
             Math.random2(0,1) => int determiner;
             
-            <<< "NOTE:", determiner >>>;
+            //<<< "NOTE:", determiner >>>;
             
             if(determiner == 1) {
                 
@@ -508,6 +528,22 @@ fun void intestine() {
     }
 }
 
+fun void epi() {
+    while(true) {
+        editHappened => now;
+        while(EPI == 1) {
+            // add zombie and lightning sound
+            
+            filename4 => buf4.read;
+            0 => buf4.pos;
+            1.0 => buf4.rate;
+            0.02 => buf4.gain;
+            8::second => now;
+            
+        }
+    }
+}
+
 // function to listen for an edit
 fun void listenForEdit() {
     spork ~ heart();
@@ -517,6 +553,8 @@ fun void listenForEdit() {
     spork ~ kidney_L();
     spork ~ kidney_R();
     spork ~ intestine();
+    spork ~ epi();
+    spork ~ nurseVoice();
     
     while(true) {
         editHappened => now;

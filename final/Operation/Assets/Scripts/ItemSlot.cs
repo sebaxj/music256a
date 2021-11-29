@@ -7,10 +7,10 @@ using UnityEngine.UI;
 public class ItemSlot : MonoBehaviour, IDropHandler {
 
     // ChucK Global Variables
-    private int HEART, LUNGS, BRAIN, STOMACH, KIDNEY_L, KIDNEY_R, INTESTINE;
+    private int HEART, LUNGS, BRAIN, STOMACH, KIDNEY_L, KIDNEY_R, INTESTINE, EPI;
 
     // Save location of objects on table
-    private Vector3 HEART_LOCATION, LUNGS_LOCATION, BRAIN_LOCATION, STOMACH_LOCATION, KIDNEY_L_LOCATION, KIDNEY_R_LOCATION, INTESTINE_LOCATION;
+    private Vector3 HEART_LOCATION, LUNGS_LOCATION, BRAIN_LOCATION, STOMACH_LOCATION, KIDNEY_L_LOCATION, KIDNEY_R_LOCATION, INTESTINE_LOCATION, EPI_LOCATION;
 
     // Text for Vital Monitor
     public static Text HR, SPO2, BP, TEMP;
@@ -21,7 +21,7 @@ public class ItemSlot : MonoBehaviour, IDropHandler {
     void Start() {
         GetComponent<ChuckSubInstance>().RunFile("ChuckScript.ck", true);   
 
-        HEART = 0; LUNGS = 0; BRAIN = 0; STOMACH = 0; KIDNEY_L = 0; KIDNEY_R = 0; INTESTINE = 0;
+        HEART = 0; LUNGS = 0; BRAIN = 0; STOMACH = 0; KIDNEY_L = 0; KIDNEY_R = 0; INTESTINE = 0; EPI = 0;
 
         HEART_LOCATION = new Vector3(-128, 201, 0);
         LUNGS_LOCATION = new Vector3(-128, 120, 0);
@@ -30,6 +30,7 @@ public class ItemSlot : MonoBehaviour, IDropHandler {
         KIDNEY_L_LOCATION = new Vector3(-63, 176, 0);
         KIDNEY_R_LOCATION = new Vector3(-17, 232, 0);
         INTESTINE_LOCATION = new Vector3(-227, 140, 0);
+        EPI_LOCATION = new Vector3(63, -288, 0);
 
         // Text
         HR = GameObject.Find("HR").GetComponent<Text>();
@@ -273,6 +274,38 @@ public class ItemSlot : MonoBehaviour, IDropHandler {
                         STOMACH = 1;
                         TEMP_Slider.value += 10;
 
+                        if(HEART == 1) {
+                            HR_Slider.value += 20;
+                            BP_Slider.value += 20;
+                            if(KIDNEY_L == 1) {
+                                BP_Slider.value += 10;
+                            }
+                            if(KIDNEY_R == 1) {
+                                BP_Slider.value += 10;
+                            }
+                            if(INTESTINE == 1) {
+                                BP_Slider.value += 15;
+                            }
+                            if(BRAIN == 1) {
+                                BP_Slider.value += 20;
+                            }
+                        }
+                        if(LUNGS == 1) {
+                            SPO2_Slider.value += 2;
+                            if(KIDNEY_L == 1) {
+                                SPO2_Slider.value += 2;
+                            }
+                            if(KIDNEY_R == 1) {
+                                SPO2_Slider.value += 2;
+                            }
+                            if(INTESTINE == 1) {
+                                SPO2_Slider.value += 2;
+                            }
+                            if(BRAIN == 1) {
+                                SPO2_Slider.value += 2;
+                            }
+                        }
+
                         // send edit to ChucK
                         GetComponent<ChuckSubInstance>().SetInt("STOMACH", STOMACH);
                         GetComponent<ChuckSubInstance>().BroadcastEvent("editHappened"); 
@@ -304,6 +337,38 @@ public class ItemSlot : MonoBehaviour, IDropHandler {
                         Debug.Log("Kidney L");
                         KIDNEY_L = 1;
                         TEMP_Slider.value += 5;
+
+                        if(HEART == 1) {
+                            HR_Slider.value += 20;
+                            BP_Slider.value += 20;
+                            if(STOMACH == 1) {
+                                BP_Slider.value += 10;
+                            }
+                            if(KIDNEY_R == 1) {
+                                BP_Slider.value += 10;
+                            }
+                            if(INTESTINE == 1) {
+                                BP_Slider.value += 15;
+                            }
+                            if(BRAIN == 1) {
+                                BP_Slider.value += 20;
+                            }
+                        }
+                        if(LUNGS == 1) {
+                            SPO2_Slider.value += 2;
+                            if(STOMACH == 1) {
+                                SPO2_Slider.value += 2;
+                            }
+                            if(KIDNEY_R == 1) {
+                                SPO2_Slider.value += 2;
+                            }
+                            if(INTESTINE == 1) {
+                                SPO2_Slider.value += 2;
+                            }
+                            if(BRAIN == 1) {
+                                SPO2_Slider.value += 2;
+                            }
+                        }
 
                         // send edit to ChucK
                         GetComponent<ChuckSubInstance>().SetInt("KIDNEY_L", KIDNEY_L);
@@ -337,6 +402,38 @@ public class ItemSlot : MonoBehaviour, IDropHandler {
                         KIDNEY_R = 1;
                         TEMP_Slider.value += 5;
 
+                        if(HEART == 1) {
+                            HR_Slider.value += 20;
+                            BP_Slider.value += 20;
+                            if(KIDNEY_L == 1) {
+                                BP_Slider.value += 10;
+                            }
+                            if(STOMACH == 1) {
+                                BP_Slider.value += 10;
+                            }
+                            if(INTESTINE == 1) {
+                                BP_Slider.value += 15;
+                            }
+                            if(BRAIN == 1) {
+                                BP_Slider.value += 20;
+                            }
+                        }
+                        if(LUNGS == 1) {
+                            SPO2_Slider.value += 2;
+                            if(KIDNEY_L == 1) {
+                                SPO2_Slider.value += 2;
+                            }
+                            if(STOMACH == 1) {
+                                SPO2_Slider.value += 2;
+                            }
+                            if(INTESTINE == 1) {
+                                SPO2_Slider.value += 2;
+                            }
+                            if(BRAIN == 1) {
+                                SPO2_Slider.value += 2;
+                            }
+                        }
+
                         // send edit to ChucK
                         GetComponent<ChuckSubInstance>().SetInt("KIDNEY_R", KIDNEY_R);
                         GetComponent<ChuckSubInstance>().BroadcastEvent("editHappened"); 
@@ -369,6 +466,38 @@ public class ItemSlot : MonoBehaviour, IDropHandler {
                         INTESTINE = 1;
                         TEMP_Slider.value += 8;
 
+                        if(HEART == 1) {
+                            HR_Slider.value += 20;
+                            BP_Slider.value += 20;
+                            if(KIDNEY_L == 1) {
+                                BP_Slider.value += 10;
+                            }
+                            if(KIDNEY_R == 1) {
+                                BP_Slider.value += 10;
+                            }
+                            if(STOMACH == 1) {
+                                BP_Slider.value += 15;
+                            }
+                            if(BRAIN == 1) {
+                                BP_Slider.value += 20;
+                            }
+                        }
+                        if(LUNGS == 1) {
+                            SPO2_Slider.value += 2;
+                            if(KIDNEY_L == 1) {
+                                SPO2_Slider.value += 2;
+                            }
+                            if(KIDNEY_R == 1) {
+                                SPO2_Slider.value += 2;
+                            }
+                            if(STOMACH == 1) {
+                                SPO2_Slider.value += 2;
+                            }
+                            if(BRAIN == 1) {
+                                SPO2_Slider.value += 2;
+                            }
+                        }
+
                         // send edit to ChucK
                         GetComponent<ChuckSubInstance>().SetInt("INTESTINE", INTESTINE);
                         GetComponent<ChuckSubInstance>().BroadcastEvent("editHappened"); 
@@ -387,6 +516,43 @@ public class ItemSlot : MonoBehaviour, IDropHandler {
                             eventData.pointerDrag.GetComponent<RectTransform>().anchoredPosition = KIDNEY_R_LOCATION;
                         } else if(eventData.pointerDrag.name == "STOMACH") {
                             eventData.pointerDrag.GetComponent<RectTransform>().anchoredPosition = STOMACH_LOCATION;
+                        }
+                    }
+                    
+                    break;
+
+                case "Epi_Slot":
+
+                    // if the organ matches the right slot, its position will be anchored
+                    if(eventData.pointerDrag.name == "EPI") {
+                        // let Chunity know that lungs have been added
+                        Debug.Log("EPI");
+                        EPI = 1;
+
+                        HR_Slider.value += 180;
+                        SPO2_Slider.value += 10;
+                        BP_Slider.value += 180;
+
+                        // send edit to ChucK
+                        GetComponent<ChuckSubInstance>().SetInt("EPI", EPI);
+                        GetComponent<ChuckSubInstance>().BroadcastEvent("editHappened"); 
+                    } else {
+                        // else,
+                        // move organ back to table
+                        if(eventData.pointerDrag.name == "BRAIN") {
+                            eventData.pointerDrag.GetComponent<RectTransform>().anchoredPosition = BRAIN_LOCATION;
+                        } else if(eventData.pointerDrag.name == "HEART") {
+                            eventData.pointerDrag.GetComponent<RectTransform>().anchoredPosition = HEART_LOCATION;
+                        } else if(eventData.pointerDrag.name == "LUNGS") {
+                            eventData.pointerDrag.GetComponent<RectTransform>().anchoredPosition = LUNGS_LOCATION;
+                        } else if(eventData.pointerDrag.name == "KIDNEY_L") {
+                            eventData.pointerDrag.GetComponent<RectTransform>().anchoredPosition = KIDNEY_L_LOCATION;
+                        } else if(eventData.pointerDrag.name == "KIDNEY_R") {
+                            eventData.pointerDrag.GetComponent<RectTransform>().anchoredPosition = KIDNEY_R_LOCATION;
+                        } else if(eventData.pointerDrag.name == "STOMACH") {
+                            eventData.pointerDrag.GetComponent<RectTransform>().anchoredPosition = STOMACH_LOCATION;
+                        } else if(eventData.pointerDrag.name == "EPI") {
+                            eventData.pointerDrag.GetComponent<RectTransform>().anchoredPosition = EPI_LOCATION;
                         }
                     }
                     
@@ -495,6 +661,23 @@ public class ItemSlot : MonoBehaviour, IDropHandler {
                             eventData.pointerDrag.GetComponent<RectTransform>().anchoredPosition = INTESTINE_LOCATION;
 
                             break; 
+
+                        case "EPI":
+
+                            EPI = 0;
+
+                            HR_Slider.value -= 60;
+                            SPO2_Slider.value -= 10;
+                            BP_Slider.value -= 40;
+
+                            // send edit to ChucK
+                            GetComponent<ChuckSubInstance>().SetInt("EPI", EPI);
+                            GetComponent<ChuckSubInstance>().BroadcastEvent("editHappened"); 
+
+                            // move organ back to table
+                            eventData.pointerDrag.GetComponent<RectTransform>().anchoredPosition = EPI_LOCATION;
+
+                            break;
 
                         default:
                             break;
