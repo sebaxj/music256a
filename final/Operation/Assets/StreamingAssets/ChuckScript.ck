@@ -85,7 +85,7 @@ while( true ) {
     
     Math.random2(0,5) => int determiner;
     
-    <<< determiner >>>;
+    //<<< determiner >>>;
     
     if(determiner == 1) {
         // chose random pentatonic note
