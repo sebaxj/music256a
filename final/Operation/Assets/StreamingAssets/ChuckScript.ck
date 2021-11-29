@@ -14,7 +14,7 @@
 global Event editHappened;
 
 // Constants
-0::ms => dur BEAT;
+240::ms => dur BEAT;
 
 // CHORDS ARRAYS //
 // min
@@ -34,6 +34,9 @@ global Event editHappened;
 
 // fully dim 7
 [0., 3., 6., 9.] @=> float dim7[];
+
+// pentatonic scale notes
+[0., 2., 4., 7., 9., 12.] @=> float pent[];
 ///////////////////////////////////////////////////////////
 
 spork ~ listenForEdit();
@@ -72,12 +75,43 @@ LPF low => NRev rev => dac;
 // mix reverb
 .1 => rev.mix;
 
+spork ~ pentatonic();
+240::ms => now;
+spork ~ pentatonic();
+
 // infinite time-loop
 while( true ) {
-    play(60, maj); // c maj
+    // chose random 0 or 1
+    // if 1, play note
+        // chose random pentatonic note
+    // else, silence
+    // move time
     
-    // play 4 measure repeating melody
-    BEAT => now;
+    Math.random2(0,1) => int determiner;
+    
+    <<< determiner >>>;
+    
+    if(determiner == 1) {
+        // chose random pentatonic note
+        // play()
+        
+        play(60, maj); // c maj
+        BEAT * 6 => now;
+    } else {
+        BEAT * 4 => now;
+    }
+}
+
+fun void play(int root, float chord[]) {
+    
+    .5 => float vel;
+    
+    for(0 => int i; i < 8; i++) {
+        playChord(root, chord, vel, 50::ms, 50::ms, 0.5, 100::ms);
+        
+        80::ms => now;
+        vel - .2 => vel;
+    }
 }
 
 // function to play a sound
@@ -110,6 +144,90 @@ fun void playSound() {
     
     // advance time by 300 ms (duration until the next sound)
     300::ms => now;
+}
+
+fun void playChord(int root, float chord[], float vel, 
+dur a, dur d, float s, dur r)
+{
+    // ugens "local" to the function
+    TriOsc osc[4];
+    ADSR e => low;
+    
+    // patch
+    for(0 => int i; i < osc.cap(); i++) {
+        osc[i] => e;
+    }
+    
+    // freq and gain
+    for(0 => int i; i < osc.cap(); i++) {
+        Std.mtof(root + chord[i]) => osc[i].freq;
+        vel => osc[i].gain;
+    }
+    
+    
+    // open env (e is your envelope)
+    e.set(a, d, s, r);
+    e.keyOn();
+    
+    // A through end of S
+    e.releaseTime() => now;
+    
+    // close env
+    e.keyOff();
+    
+    // release
+    e.releaseTime() => now;
+    
+    e !=> low;
+}
+
+fun void pentatonic() {
+    
+    TriOsc note => ADSR e2;
+    
+    200::ms => dur a;
+    160::ms => dur d;
+    0.5 => float s;
+    120::ms => dur r;
+    
+    while(true) {
+        
+        Math.random2(0,1) => int determiner;
+        
+        <<< "NOTE:", determiner >>>;
+        
+        if(determiner == 1) {
+        
+        
+            // random frequency
+            Std.mtof(60 + pent[Math.random2(0, 5)]) => note.freq;
+        
+        
+            // random gain
+            Math.random2f(0.6, 2.0) => note.gain;
+        
+            e2 => low;
+        
+        
+            // open env (e is your envelope)
+            e2.set(a, d, s, r);
+            e2.keyOn();
+        
+            // A through end of S
+            e2.releaseTime() => now;
+        
+            // close env
+            e2.keyOff();
+        
+            // release
+            e2.releaseTime() => now;
+        
+            e2 !=> low;
+        }
+        
+        BEAT => now;
+     
+    }
 }
 
 fun void heart() {
@@ -193,50 +311,4 @@ fun void listenForEdit() {
     }
 }
 
-fun void playChord(int root, float chord[], float vel, 
-dur a, dur d, float s, dur r)
-{
-    // ugens "local" to the function
-    TriOsc osc[4];
-    ADSR e => low;
-    
-    // patch
-    for(0 => int i; i < osc.cap(); i++) {
-        osc[i] => e;
-    }
-    
-    // freq and gain
-    for(0 => int i; i < osc.cap(); i++) {
-        Std.mtof(root + chord[i]) => osc[i].freq;
-        vel => osc[i].gain;
-    }
-    
-    
-    // open env (e is your envelope)
-    e.set(a, d, s, r);
-    e.keyOn();
-    
-    // A through end of S
-    e.releaseTime() => now;
-    
-    // close env
-    e.keyOff();
-    
-    // release
-    e.releaseTime() => now;
-    
-    e !=> low;
-}
 
-
-fun void play(int root, float chord[]) {
-    
-    .5 => float vel;
-    
-    for(0 => int i; i < 8; i++) {
-        playChord(root, chord, vel, 50::ms, 50::ms, 0.5, 100::ms);
-        
-        80::ms => now;
-        vel - .2 => vel;
-    }
-}
