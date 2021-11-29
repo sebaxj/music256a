@@ -18,16 +18,27 @@ TODO:
    - Brain Activity (EEG Trace)
    - Blood Pressure (Distortion?)
    - IF: vitals kill patient -> THEN: initiate kill function in ChucK and Unity
-4. Add Main Menu with two modes:
+4. Add Epinephrine shots and Nurse's voice
+   - Nurse's voice:
+     - Consistent time intervals:
+       - "Its a great day to save lives!"
+     - When starting:
+       - "Doctor, have you ever done this before?" ... "There is a first time for everything"
+       - "Oh, this unfortunate soul"
+     - When vitals are getting good (from empty)
+       - "The patient is waking up!"
+     - When the vitals are crashing (from full)
+       - "Vitals are crashing. Do you want to administer EPI?"
+5. Add Main Menu with two modes:
    - Start with empty body
    - Start with full body
-5. Refactor project:
+6. Refactor project:
    - remove all extra files
    - sort files into folders
    - refactor scene hierarchy
    - refine .gitignore
-6. Package application and files for download, publish final website
-7. Refactor main index.html to present better UI to access all buttons
+7. Package application and files for download, publish final website
+8. Refactor main index.html to present better UI to access all buttons
 
 DONE:
 

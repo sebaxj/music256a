@@ -6,6 +6,11 @@
 0 => global int HEART;
 0 => global int LUNGS;
 0 => global int BRAIN;
+0 => global int STOMACH;
+0 => global int KIDNEY_L;
+0 => global int KIDNEY_R;
+0 => global int INTESTINE;
+
 global Event editHappened;
 
 // Constants
