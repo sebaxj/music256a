@@ -2,17 +2,23 @@
 
 TODO:
 
-1. ChucK Integration:
-
-   - Code a simple base track (pentatonic scale over a 4 bar sequence)
-   - Add density and probability feature
-   - Integrate smooth transitions between organ addition and subtraction
-
-2. Add vitals monitor
+1. Add vitals monitor
    - Heart Rate
-   - Brain Activity (EEG Trace)
    - Blood Pressure (Distortion?)
+   - Blood Oxygen
+   - Temperature
    - IF: vitals kill patient -> THEN: initiate kill function in ChucK and Unity
+   - For each `Update()` check for both input slider value and the "health" score of the patient:
+     - organ value system:
+     - 1: Brain
+     - 2: Heart
+     - 3: Lungs
+     - 4: Kidney (x2)
+     - 5: Stomach
+     - 6: Intestine
+2. Add Main Menu with two modes:
+   - Start with empty body
+   - Start with full body
 3. Add Epinephrine shots and Nurse's voice
    - Nurse's voice:
      - Consistent time intervals:
@@ -24,16 +30,13 @@ TODO:
        - "The patient is waking up!"
      - When the vitals are crashing (from full)
        - "Vitals are crashing. Do you want to administer EPI?"
-4. Add Main Menu with two modes:
-   - Start with empty body
-   - Start with full body
-5. Refactor project:
+4. Refactor project:
    - remove all extra files
    - sort files into folders
    - refactor scene hierarchy
    - refine .gitignore
-6. Package application and files for download, publish final website
-7. Refactor main index.html to present better UI to access all buttons
+5. Package application and files for download, publish final website
+6. Refactor main index.html to present better UI to access all buttons
 
 DONE:
 
@@ -49,3 +52,9 @@ DONE:
 
   - Add item slots for all organs
   - Get drag and drop to work with organs and trash
+
+- ChucK Integration:
+
+  - Code a simple base track (pentatonic scale over a 4 bar sequence)
+  - Add density and probability feature
+  - Integrate smooth transitions between organ addition and subtraction

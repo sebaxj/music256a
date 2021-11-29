@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
+using UnityEngine.UI;
 
 public class ItemSlot : MonoBehaviour, IDropHandler {
 
@@ -11,6 +12,12 @@ public class ItemSlot : MonoBehaviour, IDropHandler {
     // Save location of objects on table
     private Vector3 HEART_LOCATION, LUNGS_LOCATION, BRAIN_LOCATION, STOMACH_LOCATION, KIDNEY_L_LOCATION, KIDNEY_R_LOCATION, INTESTINE_LOCATION;
 
+    // Text for Vital Monitor
+    public static Text HR, SPO2, BP, TEMP;
+
+    // Sliders for Vital Monitor
+    public static Slider HR_Slider, SPO2_Slider, BP_Slider, TEMP_Slider;
+
     void Start() {
         GetComponent<ChuckSubInstance>().RunFile("ChuckScript.ck", true);   
 
@@ -18,11 +25,33 @@ public class ItemSlot : MonoBehaviour, IDropHandler {
 
         HEART_LOCATION = new Vector3(-128, 201, 0);
         LUNGS_LOCATION = new Vector3(-128, 120, 0);
-        BRAIN_LOCATION = new Vector3(-247, 74, 0);
+        BRAIN_LOCATION = new Vector3(-285, 83, 0);
         STOMACH_LOCATION = new Vector3(-179, 164, 0);
         KIDNEY_L_LOCATION = new Vector3(-63, 176, 0);
         KIDNEY_R_LOCATION = new Vector3(-17, 232, 0);
         INTESTINE_LOCATION = new Vector3(-227, 140, 0);
+
+        // Text
+        HR = GameObject.Find("HR").GetComponent<Text>();
+        HR.text = "HR: --";
+
+        SPO2 = GameObject.Find("SPO2").GetComponent<Text>();
+        SPO2.text = "SPO2: --";
+
+        BP = GameObject.Find("BP").GetComponent<Text>();
+        BP.text = "BP: --";
+
+        TEMP = GameObject.Find("TEMP").GetComponent<Text>();
+        TEMP.text = "TEMP: --";
+
+        // Slider
+        HR_Slider = GameObject.Find("HR_Slider").GetComponent<Slider>();
+
+        SPO2_Slider = GameObject.Find("SPO2_Slider").GetComponent<Slider>();
+
+        BP_Slider = GameObject.Find("BP_Slider").GetComponent<Slider>();
+
+        TEMP_Slider = GameObject.Find("TEMP_Slider").GetComponent<Slider>();
     }
 
     public void OnDrop(PointerEventData eventData) {
@@ -130,7 +159,7 @@ public class ItemSlot : MonoBehaviour, IDropHandler {
                     if(eventData.pointerDrag.name == "STOMACH") {
                         // let Chunity know that lungs have been added
                         Debug.Log("Stomach");
-                        LUNGS = 1;
+                        STOMACH = 1;
 
                         // send edit to ChucK
                         GetComponent<ChuckSubInstance>().SetInt("STOMACH", STOMACH);
@@ -161,7 +190,7 @@ public class ItemSlot : MonoBehaviour, IDropHandler {
                     if(eventData.pointerDrag.name == "KIDNEY_L") {
                         // let Chunity know that lungs have been added
                         Debug.Log("Kidney L");
-                        LUNGS = 1;
+                        KIDNEY_L = 1;
 
                         // send edit to ChucK
                         GetComponent<ChuckSubInstance>().SetInt("KIDNEY_L", KIDNEY_L);
@@ -192,7 +221,7 @@ public class ItemSlot : MonoBehaviour, IDropHandler {
                     if(eventData.pointerDrag.name == "KIDNEY_R") {
                         // let Chunity know that lungs have been added
                         Debug.Log("Kidney R");
-                        LUNGS = 1;
+                        KIDNEY_R = 1;
 
                         // send edit to ChucK
                         GetComponent<ChuckSubInstance>().SetInt("KIDNEY_R", KIDNEY_R);
@@ -223,7 +252,7 @@ public class ItemSlot : MonoBehaviour, IDropHandler {
                     if(eventData.pointerDrag.name == "INTESTINE") {
                         // let Chunity know that lungs have been added
                         Debug.Log("Intestine");
-                        LUNGS = 1;
+                        INTESTINE = 1;
 
                         // send edit to ChucK
                         GetComponent<ChuckSubInstance>().SetInt("INTESTINE", INTESTINE);
@@ -353,4 +382,28 @@ public class ItemSlot : MonoBehaviour, IDropHandler {
         }
     }
 
+    public void Update() {
+
+        // adjust vital monitor from UI slider
+        HR.text = "HR: " + HR_Slider.value;
+        SPO2.text = "SPO2: " + SPO2_Slider.value;
+        TEMP.text = "TEMP: " + TEMP_Slider.value;
+
+        float BP_sliderValue = BP_Slider.value;
+
+        if(BP_sliderValue >= 0 && BP_sliderValue < 60) {
+            BP.text = "BP: " + BP_Slider.value + " / --";
+        } else if(BP_sliderValue >= 60 && BP_sliderValue < 100) {
+            BP.text = "BP: " + BP_Slider.value + " / 20";
+        } else if(BP_sliderValue >= 100 && BP_sliderValue < 120) {
+            BP.text = "BP: " + BP_Slider.value + " / 50";
+        } else if(BP_sliderValue >= 120 && BP_sliderValue < 140) {
+            BP.text = "BP: " + BP_Slider.value + " / 70";
+        } else if(BP_sliderValue >= 140) {
+             BP.text = "BP: " + BP_Slider.value + " / 100";
+        }
+
+        // check for which organs are in body
+        if()
+    }
 }

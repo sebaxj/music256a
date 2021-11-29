@@ -75,10 +75,6 @@ LPF low => NRev rev => dac;
 // mix reverb
 .1 => rev.mix;
 
-spork ~ pentatonic();
-240::ms => now;
-spork ~ pentatonic();
-
 // infinite time-loop
 while( true ) {
     // chose random 0 or 1
@@ -87,7 +83,7 @@ while( true ) {
     // else, silence
     // move time
     
-    Math.random2(0,1) => int determiner;
+    Math.random2(0,5) => int determiner;
     
     <<< determiner >>>;
     
@@ -96,9 +92,15 @@ while( true ) {
         // play()
         
         play(60, maj); // c maj
-        BEAT * 6 => now;
+        BEAT * 24 => now;
+    } else if(determiner == 2) {
+        play(55, v7);
+        BEAT * 24 => now;
+    } else if(determiner == 3) {
+        play(65, maj);
+        BEAT * 24 => now;
     } else {
-        BEAT * 4 => now;
+        BEAT * 16 => now;
     }
 }
 
@@ -200,7 +202,7 @@ fun void pentatonic() {
         
         
             // random frequency
-            Std.mtof(60 + pent[Math.random2(0, 5)]) => note.freq;
+            Std.mtof(48 + pent[Math.random2(0, 5)]) => note.freq;
         
         
             // random gain
@@ -300,12 +302,222 @@ fun void brain() {
     }
 }
 
+fun void stomach() {
+    TriOsc note => ADSR e2;
+    
+    200::ms => dur a;
+    160::ms => dur d;
+    0.5 => float s;
+    120::ms => dur r;
+    
+    
+    
+    while(true) {
+        editHappened => now;
+        while(STOMACH == 1) {
+            
+            Math.random2(0,2) => int determiner;
+            
+            <<< "NOTE:", determiner >>>;
+            
+            if(determiner == 1) {
+                
+                
+                // random frequency
+                Std.mtof(48 + pent[Math.random2(0, 5)]) => note.freq;
+                
+                
+                // random gain
+                Math.random2f(6.6, 8.0) => note.gain;
+                
+                e2 => low;
+                
+                
+                // open env (e is your envelope)
+                e2.set(a, d, s, r);
+                e2.keyOn();
+                
+                // A through end of S
+                e2.releaseTime() => now;
+                
+                // close env
+                e2.keyOff();
+                
+                // release
+                e2.releaseTime() => now;
+                
+                e2 !=> low;
+            }
+            
+            BEAT => now;
+            
+        }
+    }
+}
+
+fun void kidney_L() {
+    TriOsc note => ADSR e2;
+    
+    200::ms => dur a;
+    160::ms => dur d;
+    0.5 => float s;
+    120::ms => dur r;
+    
+    while(true) {
+        editHappened => now;
+        while(KIDNEY_L == 1) {
+            
+            Math.random2(0,4) => int determiner;
+            
+            <<< "NOTE:", determiner >>>;
+            
+            if(determiner == 1) {
+                
+                
+                // random frequency
+                Std.mtof(72 + pent[Math.random2(0, 5)]) => note.freq;
+                
+                
+                // random gain
+                Math.random2f(7.2, 8.5) => note.gain;
+                
+                e2 => low;
+                
+                
+                // open env (e is your envelope)
+                e2.set(a, d, s, r);
+                e2.keyOn();
+                
+                // A through end of S
+                e2.releaseTime() => now;
+                
+                // close env
+                e2.keyOff();
+                
+                // release
+                e2.releaseTime() => now;
+                
+                e2 !=> low;
+            }
+            
+            BEAT => now;
+            
+        }
+    }        
+}
+
+fun void kidney_R() {
+    TriOsc note => ADSR e2;
+    
+    200::ms => dur a;
+    160::ms => dur d;
+    0.5 => float s;
+    120::ms => dur r;
+    
+    while(true) {
+        editHappened => now;
+        while(KIDNEY_R == 1) {
+            
+            Math.random2(0,4) => int determiner;
+            
+            <<< "NOTE:", determiner >>>;
+            
+            if(determiner == 1) {
+                
+                
+                // random frequency
+                Std.mtof(72 + pent[Math.random2(0, 5)]) => note.freq;
+                
+                
+                // random gain
+                Math.random2f(7.2, 8.5) => note.gain;
+                
+                e2 => low;
+                
+                
+                // open env (e is your envelope)
+                e2.set(a, d, s, r);
+                e2.keyOn();
+                
+                // A through end of S
+                e2.releaseTime() => now;
+                
+                // close env
+                e2.keyOff();
+                
+                // release
+                e2.releaseTime() => now;
+                
+                e2 !=> low;
+            }
+            
+            BEAT => now;
+            
+        }
+    }
+}
+
+fun void intestine() {
+    TriOsc note => ADSR e2;
+    
+    200::ms => dur a;
+    160::ms => dur d;
+    0.5 => float s;
+    120::ms => dur r;
+    
+    while(true) {
+        editHappened => now;
+        while(INTESTINE == 1) {
+            
+            Math.random2(0,1) => int determiner;
+            
+            <<< "NOTE:", determiner >>>;
+            
+            if(determiner == 1) {
+                
+                
+                // random frequency
+                Std.mtof(36 + pent[Math.random2(0, 5)]) => note.freq;
+                
+                
+                // random gain
+                Math.random2f(7.0, 8.5) => note.gain;
+                
+                e2 => low;
+                
+                
+                // open env (e is your envelope)
+                e2.set(a, d, s, r);
+                e2.keyOn();
+                
+                // A through end of S
+                e2.releaseTime() => now;
+                
+                // close env
+                e2.keyOff();
+                
+                // release
+                e2.releaseTime() => now;
+                
+                e2 !=> low;
+            }
+            
+            BEAT => now;
+            
+        }
+    }
+}
 
 // function to listen for an edit
 fun void listenForEdit() {
     spork ~ heart();
     spork ~ lungs();
     spork ~ brain();
+    spork ~ stomach();
+    spork ~ kidney_L();
+    spork ~ kidney_R();
+    spork ~ intestine();
+    
     while(true) {
         editHappened => now;
     }
