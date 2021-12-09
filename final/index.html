@@ -20,7 +20,7 @@
 
       <h1></h1>
 
-      <h3 id="final">TODO: TITLE (Musical Operation)</h3>
+      <h3 id="final">Musical Operation</h3>
 
       <video
         alt="video of a demonstration of my final polished software"
@@ -28,11 +28,82 @@
         controls
         preload="true"
       >
-        <source src="./assets/milestone2.mov" type="video/mp4" />
+        <source
+          src="./assets/final-presentation/final-polished.mov"
+          type="video/mp4"
+        />
         Your browser does not support HTML video.
       </video>
-      <p></p>
-      <a href="./archive.html" class="button1">Project Archive</a><br />
+      <h3>A Final Note</h3>
+      <p>
+        I began this project with the goal of creating a music experience
+        explored through the traditional <i>Operation</i> paradigm.
+        <b><i>Musical Operation</i></b> uses Chunity to audibly reflect the
+        state of health of the patient which is a cumulative result of the
+        organs and and vitals of the patient. The user is able to interact with
+        either, allowing infinite posibilities of feedback. More severe vitals
+        will yield dissonant sounds based off dimished chords. On the other
+        hand, stable vitals will modulate towards minor, then major, and finally
+        a pentatonic scale. Using different combinations of organs, and
+        different dial settings, one can achieve a wide range of sounds out of
+        my project. ChucK runs an algorithm which interprets the values of vital
+        signs and reflects the corresponding stability or unstablility of the
+        patient through the organs which each operate as their own synthesizer,
+        being activated when placed in the patient. One point I would like to
+        emphasize is that when the brain or heart are placed on the scale, the
+        track which plays is a biosignal dataset of blood presure and skin
+        conductivity over time which I analyzed. The actual physiological marker
+        values were quantized to a C major scale and then stored as MIDI data.
+        In the backgroud of the scene one can see a white object with black
+        scribbles on it. This is a fragment of the visual representation of the
+        processed biodata.
+      </p>
+      <p>
+        I used the following assets:<br />
+        <i>
+          1. Hospital Bed, Cobble Games<br />
+          2. HuMan 3D Project, Milos Baskic<br />
+          3. Surgical Intruments, MIXALL<br />
+          4. Morgue Room PBR, ROKAY3D<br />
+        </i>
+      </p>
+      <h1></h1>
+      <center>
+        <img
+          src="./assets/final-presentation/final-screenshot.png"
+          alt="ecg"
+          width="700"
+          height="380"
+        />
+        <h3>Documentation:</h3>
+      </center>
+      <p>
+        Target OS: Mac OSX Big Sur 11.6<br />
+        <br />
+        To Build the App:<br />
+        1. Download the ZIP file 2. Decompress the <code>.zip</code> file and
+        open the Application.<br />
+        <br />
+        To Build the Chunity Asset:<br />
+        1. Download the ZIP file for the Chunity Asset.<br />
+        2. Decompress the <code>.zip</code> file.<br />
+        3. In a Unity URP (Universal Render Pipeline) Project, click
+        <code>Assets -> Import Asset -> Custom Package</code> and then select
+        the decompressed <code>.unity</code> file.<br />
+        <br />
+      </p>
+      <br />
+      <center>
+        <a href="./archive.html" class="button1">Project Archive</a>
+        <a href="./assets/final-presentation/Final_v6.zip" class="button1"
+          >Musical Operation App</a
+        >
+        <a
+          href="./assets/final-presentation/final-package.unitypackage.zip"
+          class="button1"
+          >Musical Operation Chunity Package</a
+        >
+      </center>
       <h1></h1>
     </body>
   </html>
