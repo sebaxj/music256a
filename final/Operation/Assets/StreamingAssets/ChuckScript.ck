@@ -44,31 +44,34 @@ spork ~ listenForEdit();
 
 // drum section
 me.dir() + "Heartbeat.wav" => string filename;
-
-// patch
 SndBuf buf => dac;
 
 // zombie section
 me.dir() + "zombie.wav" => string filename2;
-
-// patch
 SndBuf buf2 => dac;
 
 // lightning section
 me.dir() + "lightning.wav" => string filename3;
-
-// patch
 SndBuf buf3 => dac;
 
 // epi section
 me.dir() + "scream.wav" => string filename4;
-
 SndBuf buf4 => dac;
 
-// nurse section
-me.dir() + "epi.wav" => string filename5;
-
+// nurse section //
+me.dir() + "VitalsLowAddEpi.wav" => string filename5;
 SndBuf buf5 => dac;
+me.dir() + "HaveYouDoneThisBefore.wav" => string filename6;
+SndBuf buf6 => dac;
+me.dir() + "ItsAGreatDay.wav" => string filename7;
+SndBuf buf7 => dac;
+me.dir() + "ThePatientIsWakingUp.wav" => string filename8;
+SndBuf buf8 => dac;
+me.dir() + "ThereIsAFirstTime.wav" => string filename9;
+SndBuf buf9 => dac;
+me.dir() + "VitalsAreCrashing.wav" => string filename10;
+SndBuf buf10 => dac;
+
 
 // Global UGen //
 // patch low -> rev -> dax ->
@@ -239,17 +242,6 @@ fun void pentatonic() {
      
     }
 }
-
-fun void nurseVoice() {
-    30::second => now;
-    filename5 => buf5.read;
-    0 => buf5.pos;
-    1.0 => buf5.rate;
-    0.1 => buf5.gain;
-    6::second => now;
-}
-
-
 
 fun void heart() {
     while(true) {
@@ -532,7 +524,6 @@ fun void epi() {
     while(true) {
         editHappened => now;
         while(EPI == 1) {
-            // add zombie and lightning sound
             
             filename4 => buf4.read;
             0 => buf4.pos;
@@ -544,6 +535,85 @@ fun void epi() {
     }
 }
 
+fun void nurse1() {
+    while(true) {
+        editHappened => now;
+        while() {
+            filename5 => buf5.read;
+            0 => buf5.pos;
+            1.0 => buf5.rate;
+            0.1 => buf5.gain;
+            6::second => now;
+        }
+    }
+}
+
+fun void nurse2() {
+    while(true) {
+        editHappened => now;
+        while() {
+            filename6 => buf6.read;
+            0 => buf6.pos;
+            1.0 => buf6.rate;
+            0.1 => buf6.gain;
+            6::second => now;
+        }
+    }
+}
+
+fun void nurse3() {
+    while(true) {
+        5::second => now;
+        filename7 => buf7.read;
+        0 => buf7.pos;
+        1.0 => buf7.rate;
+        0.1 => buf7.gain;
+        25::second => now;
+    }  
+}
+
+fun void nurse4() {
+    while(true) {
+        editHappened => now;
+        while() {
+          
+          filename8 => buf8.read;
+          0 => buf8.pos;
+          1.0 => buf8.rate;
+          0.1 => buf8.gain;
+          6::second => now;
+      }
+  }
+}
+
+fun void nurse5() {
+    while(true) {
+        editHappened => now;
+        while() {
+            
+            filename9 => buf9.read;
+            0 => buf9.pos;
+            1.0 => buf9.rate;
+            0.1 => buf9.gain;
+            6::second => now;
+        }
+    }
+}
+
+fun void nurse6() {
+    while(true) {
+        editHappened => now;
+        while() {
+            filename10 => buf10.read;
+            0 => buf10.pos;
+            1.0 => buf10.rate;
+            0.1 => buf10.gain;
+            6::second => now;
+        }
+    }
+}
+
+
 // function to listen for an edit
 fun void listenForEdit() {
     spork ~ heart();
@@ -554,7 +624,12 @@ fun void listenForEdit() {
     spork ~ kidney_R();
     spork ~ intestine();
     spork ~ epi();
-    spork ~ nurseVoice();
+    spork ~ nurse1();
+    spork ~ nurse2();
+    spork ~ nurse3();
+    spork ~ nurse4();
+    spork ~ nurse5();
+    spork ~ nurse6();
     
     while(true) {
         editHappened => now;

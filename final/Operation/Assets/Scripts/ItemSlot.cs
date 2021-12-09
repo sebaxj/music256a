@@ -6,8 +6,10 @@ using UnityEngine.UI;
 
 public class ItemSlot : MonoBehaviour, IDropHandler {
 
+    public Animator anim;
+
     // ChucK Global Variables
-    private int HEART, LUNGS, BRAIN, STOMACH, KIDNEY_L, KIDNEY_R, INTESTINE, EPI;
+    private int HEART, LUNGS, BRAIN, STOMACH, KIDNEY_L, KIDNEY_R, INTESTINE, EPI, HEALTH_SCORE;
 
     // Save location of objects on table
     private Vector3 HEART_LOCATION, LUNGS_LOCATION, BRAIN_LOCATION, STOMACH_LOCATION, KIDNEY_L_LOCATION, KIDNEY_R_LOCATION, INTESTINE_LOCATION, EPI_LOCATION;
@@ -21,7 +23,7 @@ public class ItemSlot : MonoBehaviour, IDropHandler {
     void Start() {
         GetComponent<ChuckSubInstance>().RunFile("ChuckScript.ck", true);   
 
-        HEART = 0; LUNGS = 0; BRAIN = 0; STOMACH = 0; KIDNEY_L = 0; KIDNEY_R = 0; INTESTINE = 0; EPI = 0;
+        HEART = 0; LUNGS = 0; BRAIN = 0; STOMACH = 0; KIDNEY_L = 0; KIDNEY_R = 0; INTESTINE = 0; EPI = 0; HEALTH_SCORE = 0;
 
         HEART_LOCATION = new Vector3(-128, 201, 0);
         LUNGS_LOCATION = new Vector3(-128, 120, 0);
@@ -132,6 +134,10 @@ public class ItemSlot : MonoBehaviour, IDropHandler {
                         // let Chunity know that heart has been added
                         Debug.Log("Heart");
                         HEART = 1;
+
+                        anim.SetFloat("Trigger", 2);
+                        eventData.pointerDrag.GetComponent<RectTransform>().anchoredPosition = new Vector3(231, 201, 0);
+
                         HR_Slider.value += 40;
                         BP_Slider.value += 60;
 
@@ -464,6 +470,12 @@ public class ItemSlot : MonoBehaviour, IDropHandler {
                         // let Chunity know that lungs have been added
                         Debug.Log("Intestine");
                         INTESTINE = 1;
+
+                        anim.SetFloat("Trigger", 1);
+                        eventData.pointerDrag.GetComponent<RectTransform>().anchoredPosition = new Vector3(245, 184, 0);
+
+                        
+
                         TEMP_Slider.value += 8;
 
                         if(HEART == 1) {
@@ -566,6 +578,7 @@ public class ItemSlot : MonoBehaviour, IDropHandler {
                         case "HEART":
 
                             HEART = 0;
+                            anim.SetFloat("Trigger", 0);
                             HR_Slider.value -= 40;
                             BP_Slider.value -= 60;
 
@@ -608,7 +621,7 @@ public class ItemSlot : MonoBehaviour, IDropHandler {
                         
                         case "STOMACH":
 
-                            BRAIN = 0;
+                            STOMACH = 0;
                             TEMP_Slider.value -= 10;
 
                             // send edit to ChucK
@@ -622,7 +635,7 @@ public class ItemSlot : MonoBehaviour, IDropHandler {
 
                         case "KIDNEY_L":
 
-                            BRAIN = 0;
+                            KIDNEY_L = 0;
                             TEMP_Slider.value -= 5;
 
                             // send edit to ChucK
@@ -636,7 +649,7 @@ public class ItemSlot : MonoBehaviour, IDropHandler {
 
                         case "KIDNEY_R":
 
-                            BRAIN = 0;
+                            KIDNEY_R = 0;
                             TEMP_Slider.value -= 5;
 
                             // send edit to ChucK
@@ -650,7 +663,8 @@ public class ItemSlot : MonoBehaviour, IDropHandler {
 
                         case "INTESTINE":
 
-                            BRAIN = 0;
+                            INTESTINE = 0;
+                            anim.SetFloat("Trigger", 0);
                             TEMP_Slider.value -= 8;
 
                             // send edit to ChucK

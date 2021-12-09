@@ -1,8 +1,13 @@
 # Project **Operation**
 
+Comments from Milestone 2:
+
+- Unused screen realestate
+- Patient movememt
+
 TODO:
 
-1. Add Main Menu with two modes:
+1. (LAST: IF TIME) Add Main Menu with two modes:
    - Start with empty body
    - Start with full body
 2. Add Epinephrine shots and Nurse's voice
@@ -16,16 +21,21 @@ TODO:
        - "The patient is waking up!"
      - When the vitals are crashing (from full)
        - "Vitals are crashing. Do you want to administer EPI?"
-3. Edit vitals algorithm
+3. Allow patient arms to move
+4. Allow patient arms to take out organs, AND stretch intestine into a "string"
+5. Edit vitals algorithm
    - Refactor algorithm to be more percise and concise
    - IF: vitals kill patient -> THEN: initiate kill function in ChucK and Unity
-4. Refactor project:
+   - Add modulation between dissonant -> minor -> major
+6. Implement vitals monitor with ChucK
+7. Add biosignals MIDI as an easter egg.
+8. Refactor project:
    - remove all extra files
    - sort files into folders
    - refactor scene hierarchy
    - refine .gitignore
-5. Package application and files for download, publish final website
-6. Refactor main index.html to present better UI to access all buttons
+9. Package application and files for download, publish final website
+10. Refactor main index.html to present better UI to access all buttons
 
 DONE:
 
