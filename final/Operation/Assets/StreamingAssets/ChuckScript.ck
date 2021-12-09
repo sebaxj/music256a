@@ -11,6 +11,12 @@
 0 => global int KIDNEY_R;
 0 => global int INTESTINE;
 0 => global int EPI;
+0 => global int ONE;
+0 => global int TWO;
+0 => global int THREE;
+0 => global int FOUR;
+0 => global int EASTER_EGG1;
+0 => global int EASTER_EGG2;
 
 global Event editHappened;
 
@@ -44,34 +50,25 @@ spork ~ listenForEdit();
 
 // drum section
 me.dir() + "Heartbeat.wav" => string filename;
-SndBuf buf => dac;
 
 // zombie section
 me.dir() + "zombie.wav" => string filename2;
-SndBuf buf2 => dac;
 
 // lightning section
 me.dir() + "lightning.wav" => string filename3;
-SndBuf buf3 => dac;
 
 // epi section
 me.dir() + "scream.wav" => string filename4;
-SndBuf buf4 => dac;
 
 // nurse section //
 me.dir() + "VitalsLowAddEpi.wav" => string filename5;
-SndBuf buf5 => dac;
 me.dir() + "HaveYouDoneThisBefore.wav" => string filename6;
-SndBuf buf6 => dac;
 me.dir() + "ItsAGreatDay.wav" => string filename7;
 SndBuf buf7 => dac;
 me.dir() + "ThePatientIsWakingUp.wav" => string filename8;
-SndBuf buf8 => dac;
 me.dir() + "ThereIsAFirstTime.wav" => string filename9;
-SndBuf buf9 => dac;
 me.dir() + "VitalsAreCrashing.wav" => string filename10;
-SndBuf buf10 => dac;
-
+me.dir() + "sonifyBiosignals_audio.wav" => string filename11;
 
 // Global UGen //
 // patch low -> rev -> dax ->
@@ -102,13 +99,35 @@ while( true ) {
         // chose random pentatonic note
         // play()
         
-        play(60, maj); // c maj
+        if(ONE == 1) {
+            play(60, dim7); // c maj
+        } else if(TWO == 1) {
+            play(60, dim); // c maj
+        } else if(THREE == 1) {
+            play(60, min); // c maj
+        } else if(FOUR == 1) {
+            play(60, maj); // c maj
+        } else {
+            
+        }
+        
+        
         BEAT * 24 => now;
     } else if(determiner == 2) {
         play(55, v7);
         BEAT * 24 => now;
     } else if(determiner == 3) {
-        play(65, maj);
+        if(ONE == 1) {
+            play(60, dim7); // c maj
+        } else if(TWO == 1) {
+            play(60, dim); // c maj
+        } else if(THREE == 1) {
+            play(60, min); // c maj
+        } else if(FOUR == 1) {
+            play(60, maj); // c maj
+        } else {
+            
+        }
         BEAT * 24 => now;
     } else {
         BEAT * 16 => now;
@@ -120,7 +139,17 @@ fun void play(int root, float chord[]) {
     .5 => float vel;
     
     for(0 => int i; i < 8; i++) {
-        playChord(root, chord, vel, 50::ms, 50::ms, 0.5, 100::ms);
+        if(ONE == 1) {
+            playChord(root, chord, vel - .3, 50::ms, 50::ms, 0.5, 100::ms);
+        } else if(TWO == 1) {
+            playChord(root, chord, vel - .2, 50::ms, 50::ms, 0.5, 100::ms);
+        } else if(THREE == 1) {
+            playChord(root, chord, vel - .1, 50::ms, 50::ms, 0.5, 100::ms);
+        } else if(FOUR == 1) {
+            playChord(root, chord, vel, 50::ms, 50::ms, 0.5, 100::ms);
+        } else {
+            playChord(root, chord, 0, 50::ms, 50::ms, 0.5, 100::ms);
+        }
         
         80::ms => now;
         vel - .2 => vel;
@@ -157,6 +186,7 @@ fun void playSound() {
     
     // advance time by 300 ms (duration until the next sound)
     300::ms => now;
+    rev !=> dac;
 }
 
 fun void playChord(int root, float chord[], float vel, 
@@ -213,11 +243,22 @@ fun void pentatonic() {
         
         
             // random frequency
-            Std.mtof(48 + pent[Math.random2(0, 5)]) => note.freq;
         
         
             // random gain
             Math.random2f(0.6, 2.0) => note.gain;
+            
+            if(ONE == 1) {
+                Std.mtof(48 + dim7[Math.random2(0, 3)]) => note.freq;
+            } else if(TWO == 1) {
+                Std.mtof(48 + min[Math.random2(0, 3)]) => note.freq;
+            } else if(THREE == 1) {
+                Std.mtof(48 + maj[Math.random2(0, 3)]) => note.freq;
+            } else if(FOUR == 1) {
+                Std.mtof(48 + pent[Math.random2(0, 5)]) => note.freq;
+            } else {
+                0.0 => note.gain;
+            }
         
             e2 => low;
         
@@ -246,17 +287,32 @@ fun void pentatonic() {
 fun void heart() {
     while(true) {
         editHappened => now;
+        SndBuf buf => dac;
         
         while(HEART == 1) {
             // add heart sound
         
             filename => buf.read;
             0 => buf.pos;
-            1.0 => buf.rate;
-            0.6 => buf.gain;
+            if(ONE == 1) {
+                0.6 => buf.rate;
+            } else if(TWO == 1) {
+                0.8 => buf.rate;
+            } else if(THREE == 1) {
+                1.0 => buf.rate;
+            } else if(FOUR == 1) {
+                2.0 => buf.rate;
+            } else {
+                0.0 => buf.rate;
+            }
+
+            
+            0.4 => buf.gain;
             1::second => now;
         
         }
+        
+        buf !=> dac;
     }
 }
 
@@ -266,7 +322,7 @@ fun void lungs() {
         while(LUNGS == 1) {
             // noise generator, biquad filter, dac (audio output) 
             Noise n => BiQuad f => Gain g => low;
-            2 => g.gain;
+
             // set biquad pole radius
             .99 => f.prad;
             // set biquad gain
@@ -280,6 +336,17 @@ fun void lungs() {
             // infinite time-loop
             while( LUNGS == 1 )
             {
+                if(ONE == 1) {
+                    1.0 => g.gain;
+                } else if(TWO == 1) {
+                    1.5 => g.gain;
+                } else if(THREE == 1) {
+                    1.8 => g.gain;
+                } else if(FOUR == 1) {
+                    2.0 => g.gain;
+                } else {
+                    0.0 => g.gain;
+                }
                 // sweep the filter resonant frequency
                 100.0 + Std.fabs(Math.sin(t)) * 15000.0 => f.pfreq;
                 t + .01 => t;
@@ -296,6 +363,9 @@ fun void lungs() {
 fun void brain() {
     while(true) {
         editHappened => now;
+        
+        SndBuf buf2 => dac;
+        SndBuf buf3 => dac;
         while(BRAIN == 1) {
             // add zombie and lightning sound
         
@@ -305,12 +375,15 @@ fun void brain() {
             0.08 => buf2.gain;
             3::second => now;
             
-            filename3 => buf3.read;
-            0 => buf3.pos;
-            1.0 => buf3.rate;
-            0.1 => buf3.gain;
+            //filename3 => buf3.read;
+            //0 => buf3.pos;
+            //1.0 => buf3.rate;
+            //0.1 => buf3.gain;
             10::second => now;
         }
+        
+        buf2 !=> dac;
+        buf3 !=> dac;
     }
 }
 
@@ -333,14 +406,23 @@ fun void stomach() {
             //<<< "NOTE:", determiner >>>;
             
             if(determiner == 1) {
+                // random gain
+                Math.random2f(6.6, 8.0) => note.gain;
                 
                 
                 // random frequency
-                Std.mtof(48 + pent[Math.random2(0, 5)]) => note.freq;
+                if(ONE == 1) {
+                    Std.mtof(48 + dim7[Math.random2(0, 3)]) => note.freq;
+                } else if(TWO == 1) {
+                    Std.mtof(48 + min[Math.random2(0, 3)]) => note.freq;
+                } else if(THREE == 1) {
+                    Std.mtof(48 + maj[Math.random2(0, 3)]) => note.freq;
+                } else if(FOUR == 1) {
+                    Std.mtof(48 + pent[Math.random2(0, 5)]) => note.freq;
+                } else {
+                    0.0 => note.gain;
+                }
                 
-                
-                // random gain
-                Math.random2f(6.6, 8.0) => note.gain;
                 
                 e2 => low;
                 
@@ -385,13 +467,23 @@ fun void kidney_L() {
             
             if(determiner == 1) {
                 
-                
-                // random frequency
-                Std.mtof(72 + pent[Math.random2(0, 5)]) => note.freq;
+           
                 
                 
                 // random gain
                 Math.random2f(7.2, 8.5) => note.gain;
+                
+                if(ONE == 1) {
+                    Std.mtof(72 + dim7[Math.random2(0, 3)]) => note.freq;
+                } else if(TWO == 1) {
+                    Std.mtof(72 + min[Math.random2(0, 3)]) => note.freq;
+                } else if(THREE == 1) {
+                    Std.mtof(72 + maj[Math.random2(0, 3)]) => note.freq;
+                } else if(FOUR == 1) {
+                    Std.mtof(72 + pent[Math.random2(0, 5)]) => note.freq;
+                } else {
+                    0.0 => note.gain;
+                }
                 
                 e2 => low;
                 
@@ -438,11 +530,22 @@ fun void kidney_R() {
                 
                 
                 // random frequency
-                Std.mtof(72 + pent[Math.random2(0, 5)]) => note.freq;
                 
                 
                 // random gain
                 Math.random2f(7.2, 8.5) => note.gain;
+                
+                if(ONE == 1) {
+                    Std.mtof(72 + dim7[Math.random2(0, 3)]) => note.freq;
+                } else if(TWO == 1) {
+                    Std.mtof(72 + min[Math.random2(0, 3)]) => note.freq;
+                } else if(THREE == 1) {
+                    Std.mtof(72 + maj[Math.random2(0, 3)]) => note.freq;
+                } else if(FOUR == 1) {
+                    Std.mtof(72 + pent[Math.random2(0, 5)]) => note.freq;
+                } else {
+                    0.0 => note.gain;
+                }
                 
                 e2 => low;
                 
@@ -489,11 +592,22 @@ fun void intestine() {
                 
                 
                 // random frequency
-                Std.mtof(36 + pent[Math.random2(0, 5)]) => note.freq;
                 
                 
                 // random gain
                 Math.random2f(7.0, 8.5) => note.gain;
+                
+                if(ONE == 1) {
+                    Std.mtof(36 + dim7[Math.random2(0, 3)]) => note.freq;
+                } else if(TWO == 1) {
+                    Std.mtof(36 + min[Math.random2(0, 3)]) => note.freq;
+                } else if(THREE == 1) {
+                    Std.mtof(36 + maj[Math.random2(0, 3)]) => note.freq;
+                } else if(FOUR == 1) {
+                    Std.mtof(36 + pent[Math.random2(0, 5)]) => note.freq;
+                } else {
+                    0.0 => note.gain;
+                }
                 
                 e2 => low;
                 
@@ -523,6 +637,8 @@ fun void intestine() {
 fun void epi() {
     while(true) {
         editHappened => now;
+        
+        SndBuf buf4 => dac;
         while(EPI == 1) {
             
             filename4 => buf4.read;
@@ -532,33 +648,39 @@ fun void epi() {
             8::second => now;
             
         }
+        buf4 !=> dac;
     }
 }
 
 fun void nurse1() {
+    SndBuf buf5 => dac;
     while(true) {
         editHappened => now;
-        while() {
+        
+        
+        if(TWO == 1) {
+            
             filename5 => buf5.read;
             0 => buf5.pos;
             1.0 => buf5.rate;
             0.1 => buf5.gain;
-            6::second => now;
+            8::second => now;
+            buf5 !=> dac;
         }
-    }
+    }    
 }
 
 fun void nurse2() {
-    while(true) {
-        editHappened => now;
-        while() {
-            filename6 => buf6.read;
-            0 => buf6.pos;
-            1.0 => buf6.rate;
-            0.1 => buf6.gain;
-            6::second => now;
-        }
-    }
+        SndBuf buf6 => dac;
+        
+        10::second => now;
+        filename6 => buf6.read;
+        0 => buf6.pos;
+        1.0 => buf6.rate;
+        0.1 => buf6.gain;
+        8::second => now;
+
+        buf6 !=> dac;
 }
 
 fun void nurse3() {
@@ -568,50 +690,87 @@ fun void nurse3() {
         0 => buf7.pos;
         1.0 => buf7.rate;
         0.1 => buf7.gain;
-        25::second => now;
-    }  
+        60::second => now;
+    } 
+    buf7 !=> dac; 
 }
 
 fun void nurse4() {
     while(true) {
         editHappened => now;
-        while() {
+        
+        SndBuf buf8 => dac;
+        while(FOUR == 1) {
           
           filename8 => buf8.read;
           0 => buf8.pos;
           1.0 => buf8.rate;
           0.1 => buf8.gain;
-          6::second => now;
+          45::second => now;
       }
+      buf8 !=> dac;
   }
 }
 
 fun void nurse5() {
-    while(true) {
-        editHappened => now;
-        while() {
-            
-            filename9 => buf9.read;
-            0 => buf9.pos;
-            1.0 => buf9.rate;
-            0.1 => buf9.gain;
-            6::second => now;
-        }
-    }
+        
+        SndBuf buf9 => dac;
+        16::second => now;
+        filename9 => buf9.read;
+        0 => buf9.pos;
+        1.0 => buf9.rate;
+        0.1 => buf9.gain;
+        8::second => now;
+        buf9 !=> dac;
 }
 
 fun void nurse6() {
     while(true) {
         editHappened => now;
-        while() {
+        
+        SndBuf buf10 => dac;
+        while(ONE == 1) {
             filename10 => buf10.read;
             0 => buf10.pos;
             1.0 => buf10.rate;
             0.1 => buf10.gain;
-            6::second => now;
+            60::second => now;
         }
+        buf10 !=> dac;
     }
 }
+
+fun void midi_audio() {
+    while(true) {
+        editHappened => now;
+        
+        SndBuf buf11 => dac;
+        while(EASTER_EGG1 == 1) {
+            filename11 => buf11.read;
+            0 => buf11.pos;
+            1.0 => buf11.rate;
+            0.1 => buf11.gain;
+            60::second => now;
+        }
+        buf11 !=> dac;
+    }
+}
+
+fun void midi_input() {
+    while(true) {
+        editHappened => now;
+        
+
+        if(EASTER_EGG2 == 1) {
+            Machine.add( me.dir() + "midi.ck" );
+        }
+        0 => EASTER_EGG2;
+    }
+}
+
+
+
+
 
 
 // function to listen for an edit
@@ -629,7 +788,9 @@ fun void listenForEdit() {
     spork ~ nurse3();
     spork ~ nurse4();
     spork ~ nurse5();
-    spork ~ nurse6();
+    //spork ~ nurse6();
+    spork ~ midi_audio();
+    spork ~ midi_input();
     
     while(true) {
         editHappened => now;

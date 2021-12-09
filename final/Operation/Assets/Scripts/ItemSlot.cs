@@ -9,7 +9,7 @@ public class ItemSlot : MonoBehaviour, IDropHandler {
     public Animator anim;
 
     // ChucK Global Variables
-    private int HEART, LUNGS, BRAIN, STOMACH, KIDNEY_L, KIDNEY_R, INTESTINE, EPI, HEALTH_SCORE;
+    private int HEART, LUNGS, BRAIN, STOMACH, KIDNEY_L, KIDNEY_R, INTESTINE, EPI, ONE, TWO, THREE, FOUR, EASTER1, EASTER2;
 
     // Save location of objects on table
     private Vector3 HEART_LOCATION, LUNGS_LOCATION, BRAIN_LOCATION, STOMACH_LOCATION, KIDNEY_L_LOCATION, KIDNEY_R_LOCATION, INTESTINE_LOCATION, EPI_LOCATION;
@@ -23,7 +23,7 @@ public class ItemSlot : MonoBehaviour, IDropHandler {
     void Start() {
         GetComponent<ChuckSubInstance>().RunFile("ChuckScript.ck", true);   
 
-        HEART = 0; LUNGS = 0; BRAIN = 0; STOMACH = 0; KIDNEY_L = 0; KIDNEY_R = 0; INTESTINE = 0; EPI = 0; HEALTH_SCORE = 0;
+        HEART = 0; LUNGS = 0; BRAIN = 0; STOMACH = 0; KIDNEY_L = 0; KIDNEY_R = 0; INTESTINE = 0; EPI = 0; ONE = 0; TWO = 0; THREE = 0; FOUR = 0; EASTER1 = 0; EASTER2 = 0;
 
         HEART_LOCATION = new Vector3(-128, 201, 0);
         LUNGS_LOCATION = new Vector3(-128, 120, 0);
@@ -57,6 +57,7 @@ public class ItemSlot : MonoBehaviour, IDropHandler {
         TEMP_Slider = GameObject.Find("TEMP_Slider").GetComponent<Slider>();
     }
 
+
     public void OnDrop(PointerEventData eventData) {
         //Debug.Log("OnDrop");
         if (eventData.pointerDrag != null) {
@@ -70,39 +71,6 @@ public class ItemSlot : MonoBehaviour, IDropHandler {
                         // let Chunity know that brain has be added
                         Debug.Log(eventData.pointerDrag.name);
                         BRAIN = 1;
-                        TEMP_Slider.value += 70;
-
-                        if(LUNGS == 1) {
-                            SPO2_Slider.value += 6;
-                            if(STOMACH == 1) {
-                                SPO2_Slider.value += 2;
-                            }
-                            if(KIDNEY_L == 1) {
-                                SPO2_Slider.value += 2;
-                            }
-                            if(KIDNEY_R == 1) {
-                                SPO2_Slider.value += 2;
-                            }
-                            if(INTESTINE == 1) {
-                                SPO2_Slider.value += 2;
-                            }
-                        }
-                        if(HEART == 1) {
-                            HR_Slider.value += 20;
-                            BP_Slider.value += 20;
-                            if(STOMACH == 1) {
-                                BP_Slider.value += 10;
-                            }
-                            if(KIDNEY_L == 1) {
-                                BP_Slider.value += 10;
-                            }
-                            if(KIDNEY_R == 1) {
-                                BP_Slider.value += 10;
-                            }
-                            if(INTESTINE == 1) {
-                                BP_Slider.value += 15;
-                            }
-                        }
                         
                         // send edit to ChucK
                         GetComponent<ChuckSubInstance>().SetInt("BRAIN", BRAIN);
@@ -138,45 +106,6 @@ public class ItemSlot : MonoBehaviour, IDropHandler {
                         anim.SetFloat("Trigger", 2);
                         eventData.pointerDrag.GetComponent<RectTransform>().anchoredPosition = new Vector3(231, 201, 0);
 
-                        HR_Slider.value += 40;
-                        BP_Slider.value += 60;
-
-                        if(LUNGS == 1) {
-                            SPO2_Slider.value += 6;
-                            if(STOMACH == 1) {
-                                SPO2_Slider.value += 2;
-                            }
-                            if(KIDNEY_L == 1) {
-                                SPO2_Slider.value += 2;
-                            }
-                            if(KIDNEY_R == 1) {
-                                SPO2_Slider.value += 2;
-                            }
-                            if(INTESTINE == 1) {
-                                SPO2_Slider.value += 2;
-                            }
-                            if(BRAIN == 1) {
-                                SPO2_Slider.value += 6;
-                            }
-                        }
-
-                        if(BRAIN == 1) {
-                            HR_Slider.value += 20;
-                            BP_Slider.value += 20;
-                            if(STOMACH == 1) {
-                                BP_Slider.value += 10;
-                            }
-                            if(KIDNEY_L == 1) {
-                                BP_Slider.value += 10;
-                            }
-                            if(KIDNEY_R == 1) {
-                                BP_Slider.value += 10;
-                            }
-                            if(INTESTINE == 1) {
-                                BP_Slider.value += 15;
-                            }
-                        }
-
                         // send edit to ChucK
                         GetComponent<ChuckSubInstance>().SetInt("HEART", HEART);
                         GetComponent<ChuckSubInstance>().BroadcastEvent("editHappened"); 
@@ -207,46 +136,6 @@ public class ItemSlot : MonoBehaviour, IDropHandler {
                         // let Chunity know that lungs have been added
                         Debug.Log("Lungs");
                         LUNGS = 1;
-                        SPO2_Slider.value += 80;
-
-                        if(BRAIN == 1) {
-                            SPO2_Slider.value += 6;
-                            if(STOMACH == 1) {
-                                SPO2_Slider.value += 2;
-                            }
-                            if(KIDNEY_L == 1) {
-                                SPO2_Slider.value += 2;
-                            }
-                            if(KIDNEY_R == 1) {
-                                SPO2_Slider.value += 2;
-                            }
-                            if(INTESTINE == 1) {
-                                SPO2_Slider.value += 2;
-                            }
-                            if(HEART == 1) {
-                                SPO2_Slider.value += 6;
-                            }
-                        }
-
-                        if(HEART == 1) {
-                            HR_Slider.value += 20;
-                            BP_Slider.value += 20;
-                            if(STOMACH == 1) {
-                                BP_Slider.value += 10;
-                            }
-                            if(KIDNEY_L == 1) {
-                                BP_Slider.value += 10;
-                            }
-                            if(KIDNEY_R == 1) {
-                                BP_Slider.value += 10;
-                            }
-                            if(INTESTINE == 1) {
-                                BP_Slider.value += 15;
-                            }
-                            if(BRAIN == 1) {
-                                BP_Slider.value += 20;
-                            }
-                        }
 
                         // send edit to ChucK
                         GetComponent<ChuckSubInstance>().SetInt("LUNGS", LUNGS);
@@ -278,39 +167,6 @@ public class ItemSlot : MonoBehaviour, IDropHandler {
                         // let Chunity know that lungs have been added
                         Debug.Log("Stomach");
                         STOMACH = 1;
-                        TEMP_Slider.value += 10;
-
-                        if(HEART == 1) {
-                            HR_Slider.value += 20;
-                            BP_Slider.value += 20;
-                            if(KIDNEY_L == 1) {
-                                BP_Slider.value += 10;
-                            }
-                            if(KIDNEY_R == 1) {
-                                BP_Slider.value += 10;
-                            }
-                            if(INTESTINE == 1) {
-                                BP_Slider.value += 15;
-                            }
-                            if(BRAIN == 1) {
-                                BP_Slider.value += 20;
-                            }
-                        }
-                        if(LUNGS == 1) {
-                            SPO2_Slider.value += 2;
-                            if(KIDNEY_L == 1) {
-                                SPO2_Slider.value += 2;
-                            }
-                            if(KIDNEY_R == 1) {
-                                SPO2_Slider.value += 2;
-                            }
-                            if(INTESTINE == 1) {
-                                SPO2_Slider.value += 2;
-                            }
-                            if(BRAIN == 1) {
-                                SPO2_Slider.value += 2;
-                            }
-                        }
 
                         // send edit to ChucK
                         GetComponent<ChuckSubInstance>().SetInt("STOMACH", STOMACH);
@@ -342,39 +198,6 @@ public class ItemSlot : MonoBehaviour, IDropHandler {
                         // let Chunity know that lungs have been added
                         Debug.Log("Kidney L");
                         KIDNEY_L = 1;
-                        TEMP_Slider.value += 5;
-
-                        if(HEART == 1) {
-                            HR_Slider.value += 20;
-                            BP_Slider.value += 20;
-                            if(STOMACH == 1) {
-                                BP_Slider.value += 10;
-                            }
-                            if(KIDNEY_R == 1) {
-                                BP_Slider.value += 10;
-                            }
-                            if(INTESTINE == 1) {
-                                BP_Slider.value += 15;
-                            }
-                            if(BRAIN == 1) {
-                                BP_Slider.value += 20;
-                            }
-                        }
-                        if(LUNGS == 1) {
-                            SPO2_Slider.value += 2;
-                            if(STOMACH == 1) {
-                                SPO2_Slider.value += 2;
-                            }
-                            if(KIDNEY_R == 1) {
-                                SPO2_Slider.value += 2;
-                            }
-                            if(INTESTINE == 1) {
-                                SPO2_Slider.value += 2;
-                            }
-                            if(BRAIN == 1) {
-                                SPO2_Slider.value += 2;
-                            }
-                        }
 
                         // send edit to ChucK
                         GetComponent<ChuckSubInstance>().SetInt("KIDNEY_L", KIDNEY_L);
@@ -406,39 +229,6 @@ public class ItemSlot : MonoBehaviour, IDropHandler {
                         // let Chunity know that lungs have been added
                         Debug.Log("Kidney R");
                         KIDNEY_R = 1;
-                        TEMP_Slider.value += 5;
-
-                        if(HEART == 1) {
-                            HR_Slider.value += 20;
-                            BP_Slider.value += 20;
-                            if(KIDNEY_L == 1) {
-                                BP_Slider.value += 10;
-                            }
-                            if(STOMACH == 1) {
-                                BP_Slider.value += 10;
-                            }
-                            if(INTESTINE == 1) {
-                                BP_Slider.value += 15;
-                            }
-                            if(BRAIN == 1) {
-                                BP_Slider.value += 20;
-                            }
-                        }
-                        if(LUNGS == 1) {
-                            SPO2_Slider.value += 2;
-                            if(KIDNEY_L == 1) {
-                                SPO2_Slider.value += 2;
-                            }
-                            if(STOMACH == 1) {
-                                SPO2_Slider.value += 2;
-                            }
-                            if(INTESTINE == 1) {
-                                SPO2_Slider.value += 2;
-                            }
-                            if(BRAIN == 1) {
-                                SPO2_Slider.value += 2;
-                            }
-                        }
 
                         // send edit to ChucK
                         GetComponent<ChuckSubInstance>().SetInt("KIDNEY_R", KIDNEY_R);
@@ -473,42 +263,6 @@ public class ItemSlot : MonoBehaviour, IDropHandler {
 
                         anim.SetFloat("Trigger", 1);
                         eventData.pointerDrag.GetComponent<RectTransform>().anchoredPosition = new Vector3(245, 184, 0);
-
-                        
-
-                        TEMP_Slider.value += 8;
-
-                        if(HEART == 1) {
-                            HR_Slider.value += 20;
-                            BP_Slider.value += 20;
-                            if(KIDNEY_L == 1) {
-                                BP_Slider.value += 10;
-                            }
-                            if(KIDNEY_R == 1) {
-                                BP_Slider.value += 10;
-                            }
-                            if(STOMACH == 1) {
-                                BP_Slider.value += 15;
-                            }
-                            if(BRAIN == 1) {
-                                BP_Slider.value += 20;
-                            }
-                        }
-                        if(LUNGS == 1) {
-                            SPO2_Slider.value += 2;
-                            if(KIDNEY_L == 1) {
-                                SPO2_Slider.value += 2;
-                            }
-                            if(KIDNEY_R == 1) {
-                                SPO2_Slider.value += 2;
-                            }
-                            if(STOMACH == 1) {
-                                SPO2_Slider.value += 2;
-                            }
-                            if(BRAIN == 1) {
-                                SPO2_Slider.value += 2;
-                            }
-                        }
 
                         // send edit to ChucK
                         GetComponent<ChuckSubInstance>().SetInt("INTESTINE", INTESTINE);
@@ -570,6 +324,47 @@ public class ItemSlot : MonoBehaviour, IDropHandler {
                     
                     break;
                 
+                case "Easter_Egg_1":
+                    // if the organ matches the right slot, its position will be anchored
+                    if(eventData.pointerDrag.name == "BRAIN") {
+                        // let Chunity know that lungs have been added
+                        Debug.Log("EASTER1");
+                        EASTER1 = 1;
+
+
+                        // send edit to ChucK
+                        GetComponent<ChuckSubInstance>().SetInt("EASTER_EGG1", EASTER1);
+                        GetComponent<ChuckSubInstance>().BroadcastEvent("editHappened"); 
+                    } else if(eventData.pointerDrag.name == "HEART") {
+                        // let Chunity know that lungs have been added
+                        Debug.Log("EASTER2");
+                        EASTER2 = 1;
+
+
+                        // send edit to ChucK
+                        GetComponent<ChuckSubInstance>().SetInt("EASTER_EGG2", EASTER2);
+                        GetComponent<ChuckSubInstance>().BroadcastEvent("editHappened"); 
+                    } else {
+                        // else,
+                        // move organ back to table
+                        if(eventData.pointerDrag.name == "INTESTINE") {
+                            eventData.pointerDrag.GetComponent<RectTransform>().anchoredPosition = INTESTINE_LOCATION;
+                        } else if(eventData.pointerDrag.name == "LUNGS") {
+                            eventData.pointerDrag.GetComponent<RectTransform>().anchoredPosition = LUNGS_LOCATION;
+                        } else if(eventData.pointerDrag.name == "KIDNEY_L") {
+                            eventData.pointerDrag.GetComponent<RectTransform>().anchoredPosition = KIDNEY_L_LOCATION;
+                        } else if(eventData.pointerDrag.name == "KIDNEY_R") {
+                            eventData.pointerDrag.GetComponent<RectTransform>().anchoredPosition = KIDNEY_R_LOCATION;
+                        } else if(eventData.pointerDrag.name == "STOMACH") {
+                            eventData.pointerDrag.GetComponent<RectTransform>().anchoredPosition = STOMACH_LOCATION;
+                        } else if(eventData.pointerDrag.name == "EPI") {
+                            eventData.pointerDrag.GetComponent<RectTransform>().anchoredPosition = EPI_LOCATION;
+                        }
+                    }
+                    
+                    break;
+
+                
                 default:
                     // let Chunity know that eventData.pointerDrag.name should be REMOVED from music (it is in trash)
                     Debug.Log(eventData.pointerDrag.name);
@@ -579,8 +374,6 @@ public class ItemSlot : MonoBehaviour, IDropHandler {
 
                             HEART = 0;
                             anim.SetFloat("Trigger", 0);
-                            HR_Slider.value -= 40;
-                            BP_Slider.value -= 60;
 
                             // send edit to ChucK
                             GetComponent<ChuckSubInstance>().SetInt("HEART", HEART);
@@ -594,7 +387,6 @@ public class ItemSlot : MonoBehaviour, IDropHandler {
                         case "LUNGS":
 
                             LUNGS = 0;
-                            SPO2_Slider.value -= 80;
 
                             // send edit to ChucK
                             GetComponent<ChuckSubInstance>().SetInt("LUNGS", LUNGS);
@@ -608,7 +400,6 @@ public class ItemSlot : MonoBehaviour, IDropHandler {
                         case "BRAIN":
 
                             BRAIN = 0;
-                            TEMP_Slider.value -= 70;
 
                             // send edit to ChucK
                             GetComponent<ChuckSubInstance>().SetInt("BRAIN", BRAIN);
@@ -622,7 +413,6 @@ public class ItemSlot : MonoBehaviour, IDropHandler {
                         case "STOMACH":
 
                             STOMACH = 0;
-                            TEMP_Slider.value -= 10;
 
                             // send edit to ChucK
                             GetComponent<ChuckSubInstance>().SetInt("STOMACH", STOMACH);
@@ -636,7 +426,6 @@ public class ItemSlot : MonoBehaviour, IDropHandler {
                         case "KIDNEY_L":
 
                             KIDNEY_L = 0;
-                            TEMP_Slider.value -= 5;
 
                             // send edit to ChucK
                             GetComponent<ChuckSubInstance>().SetInt("KIDNEY_L", KIDNEY_L);
@@ -650,7 +439,6 @@ public class ItemSlot : MonoBehaviour, IDropHandler {
                         case "KIDNEY_R":
 
                             KIDNEY_R = 0;
-                            TEMP_Slider.value -= 5;
 
                             // send edit to ChucK
                             GetComponent<ChuckSubInstance>().SetInt("KIDNEY_R", KIDNEY_R);
@@ -665,7 +453,6 @@ public class ItemSlot : MonoBehaviour, IDropHandler {
 
                             INTESTINE = 0;
                             anim.SetFloat("Trigger", 0);
-                            TEMP_Slider.value -= 8;
 
                             // send edit to ChucK
                             GetComponent<ChuckSubInstance>().SetInt("INTESTINE", INTESTINE);
@@ -731,6 +518,54 @@ public class ItemSlot : MonoBehaviour, IDropHandler {
             BP.text = "BP: " + BP_Slider.value + " / 70";
         } else if(BP_sliderValue >= 140) {
              BP.text = "BP: " + BP_Slider.value + " / 100";
+        }
+
+        if((((HR_Slider.value + SPO2_Slider.value + TEMP_Slider.value + BP_Slider.value) / 610) * 100) > 1 && (((HR_Slider.value + SPO2_Slider.value + TEMP_Slider.value + BP_Slider.value) / 610) * 100) <= 25) {
+            Debug.Log("25%");
+            //anim.SetFloat("Trigger", 0);
+            ONE = 1; TWO = 0; THREE = 0; FOUR = 0;
+            GetComponent<ChuckSubInstance>().SetInt("ONE", ONE);
+            GetComponent<ChuckSubInstance>().SetInt("TWO", TWO);
+            GetComponent<ChuckSubInstance>().SetInt("THREE", THREE);
+            GetComponent<ChuckSubInstance>().SetInt("FOUR", FOUR);
+            GetComponent<ChuckSubInstance>().BroadcastEvent("editHappened"); 
+            
+        } else if((((HR_Slider.value + SPO2_Slider.value + TEMP_Slider.value + BP_Slider.value) / 610) * 100) > 25 && (((HR_Slider.value + SPO2_Slider.value + TEMP_Slider.value + BP_Slider.value) / 610) * 100) <= 50) {
+            Debug.Log("50%");
+            //anim.SetFloat("Trigger", 3);
+            ONE = 0; TWO = 1; THREE = 0; FOUR = 0;
+            GetComponent<ChuckSubInstance>().SetInt("ONE", ONE);
+            GetComponent<ChuckSubInstance>().SetInt("TWO", TWO);
+            GetComponent<ChuckSubInstance>().SetInt("THREE", THREE);
+            GetComponent<ChuckSubInstance>().SetInt("FOUR", FOUR);
+            GetComponent<ChuckSubInstance>().BroadcastEvent("editHappened"); 
+
+        } else if((((HR_Slider.value + SPO2_Slider.value + TEMP_Slider.value + BP_Slider.value) / 610) * 100) > 50 && (((HR_Slider.value + SPO2_Slider.value + TEMP_Slider.value + BP_Slider.value) / 610) * 100) <= 75) {
+            Debug.Log("75%");
+            ONE = 0; TWO = 0; THREE = 1; FOUR = 0;
+            GetComponent<ChuckSubInstance>().SetInt("ONE", ONE);
+            GetComponent<ChuckSubInstance>().SetInt("TWO", TWO);
+            GetComponent<ChuckSubInstance>().SetInt("THREE", THREE);
+            GetComponent<ChuckSubInstance>().SetInt("FOUR", FOUR);
+            GetComponent<ChuckSubInstance>().BroadcastEvent("editHappened"); 
+
+        } else if((((HR_Slider.value + SPO2_Slider.value + TEMP_Slider.value + BP_Slider.value) / 610) * 100) > 75 && (((HR_Slider.value + SPO2_Slider.value + TEMP_Slider.value + BP_Slider.value) / 610) * 100) <= 100) {
+            Debug.Log("100%");
+            ONE = 0; TWO = 0; THREE = 0; FOUR = 1;
+            GetComponent<ChuckSubInstance>().SetInt("ONE", ONE);
+            GetComponent<ChuckSubInstance>().SetInt("TWO", TWO);
+            GetComponent<ChuckSubInstance>().SetInt("THREE", THREE);
+            GetComponent<ChuckSubInstance>().SetInt("FOUR", FOUR);
+            GetComponent<ChuckSubInstance>().BroadcastEvent("editHappened"); 
+
+        } else if((((HR_Slider.value + SPO2_Slider.value + TEMP_Slider.value + BP_Slider.value) / 610) * 100) < 1) {
+            Debug.Log("0%");
+            ONE = 0; TWO = 0; THREE = 0; FOUR = 0;
+            GetComponent<ChuckSubInstance>().SetInt("ONE", ONE);
+            GetComponent<ChuckSubInstance>().SetInt("TWO", TWO);
+            GetComponent<ChuckSubInstance>().SetInt("THREE", THREE);
+            GetComponent<ChuckSubInstance>().SetInt("FOUR", FOUR);
+            GetComponent<ChuckSubInstance>().BroadcastEvent("editHappened"); 
         }
     }
 }

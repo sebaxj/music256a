@@ -7,35 +7,14 @@ Comments from Milestone 2:
 
 TODO:
 
-1. (LAST: IF TIME) Add Main Menu with two modes:
-   - Start with empty body
-   - Start with full body
-2. Add Epinephrine shots and Nurse's voice
-   - Nurse's voice:
-     - Consistent time intervals:
-       - "Its a great day to save lives!"
-     - When starting:
-       - "Doctor, have you ever done this before?" ... "There is a first time for everything"
-       - "Oh, this unfortunate soul"
-     - When vitals are getting good (from empty)
-       - "The patient is waking up!"
-     - When the vitals are crashing (from full)
-       - "Vitals are crashing. Do you want to administer EPI?"
-3. Allow patient arms to move
-4. Allow patient arms to take out organs, AND stretch intestine into a "string"
-5. Edit vitals algorithm
-   - Refactor algorithm to be more percise and concise
-   - IF: vitals kill patient -> THEN: initiate kill function in ChucK and Unity
-   - Add modulation between dissonant -> minor -> major
-6. Implement vitals monitor with ChucK
-7. Add biosignals MIDI as an easter egg.
-8. Refactor project:
+1. Add arms moving a little in the different stages.
+2. Refactor project:
    - remove all extra files
    - sort files into folders
    - refactor scene hierarchy
    - refine .gitignore
-9. Package application and files for download, publish final website
-10. Refactor main index.html to present better UI to access all buttons
+3. Package application and files for download, publish final website
+4. Refactor main index.html to present better UI to access all buttons
 
 DONE:
 
@@ -71,3 +50,22 @@ DONE:
     - 4: Kidney (x2)
     - 5: Stomach
     - 6: Intestine
+- Add Epinephrine shots and Nurse's voice
+  - Nurse's voice:
+    - Consistent time intervals:
+      - "Its a great day to save lives!"
+    - When starting:
+      - "Doctor, have you ever done this before?" ... "There is a first time for everything"
+      - "Oh, this unfortunate soul"
+    - When vitals are getting good (from empty)
+      - "The patient is waking up!"
+    - When the vitals are crashing (from full)
+      - "Vitals are crashing. Do you want to administer EPI?"
+- Allow patient arms to move
+  - Allow patient arms to take out organs, AND stretch intestine into a "string"
+  - Edit vitals algorithm
+  - Refactor algorithm to be more percise and concise
+  - IF: vitals kill patient -> THEN: initiate kill function in ChucK and Unity
+  - Add modulation between dissonant -> minor -> major
+- Implement vitals monitor with ChucK
+- Add biosignals MIDI as an easter egg.
